@@ -54,8 +54,8 @@ android {
 
     signingConfigs {
         create("releaseBuild") {
-            val pwd = System.getenv("MOVTERY_KEYSTORE_PASSWORD")
-            storeFile = file("movtery-key.jks")
+            val pwd = System.getenv("ECLIPSE_KEYSTORE_PASSWORD")
+            storeFile = file("eclipse-key.jks")
             storePassword = pwd
             keyAlias = "mtp"
             keyPassword = pwd

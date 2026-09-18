@@ -30,11 +30,11 @@ jobs:
     - name: Build Debug APK
       run: |
         chmod +x gradlew
-        ./gradlew ZalithLauncher:assembleDebug -Darch=all
+        ./gradlew EclipseLaunch:assembleDebug -Darch=all
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
         name: EclipseLaunch-debug
-        path: ZalithLauncher/build/outputs/apk/debug/*
+        path: EclipseLaunch/build/outputs/apk/debug/*
         retention-days: 14
