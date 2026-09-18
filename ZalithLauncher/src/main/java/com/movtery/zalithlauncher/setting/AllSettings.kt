@@ -178,6 +178,9 @@ class AllSettings {
         @JvmStatic
         val quitLauncher = BooleanSettingUnit("quitLauncher", true)
 
+        @JvmStatic
+        val curseforgeApiKey = StringSettingUnit("curseforgeApiKey", "")
+
         // Experimental
         @JvmStatic
         val dumpShaders = BooleanSettingUnit("dump_shaders", false)

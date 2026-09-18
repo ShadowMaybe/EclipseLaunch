@@ -3,6 +3,7 @@ package com.movtery.zalithlauncher.feature.download.utils
 import com.movtery.zalithlauncher.InfoDistributor
 import com.movtery.zalithlauncher.feature.download.Filters
 import com.movtery.zalithlauncher.feature.download.enums.Classify
+import com.movtery.zalithlauncher.setting.AllSettings
 import com.movtery.zalithlauncher.utils.stringutils.StringUtils.containsChinese
 import com.movtery.zalithlauncher.utils.stringutils.StringUtilsKt
 import net.kdt.pojavlaunch.modloaders.modpacks.api.ApiHandler
@@ -13,7 +14,7 @@ class PlatformUtils {
     companion object {
         fun createCurseForgeApi() = ApiHandler(
             "https://api.curseforge.com/v1",
-            InfoDistributor.CURSEFORGE_API_KEY
+            AllSettings.curseforgeApiKey.getValue().ifEmpty { InfoDistributor.CURSEFORGE_API_KEY }
         )
 
         /**

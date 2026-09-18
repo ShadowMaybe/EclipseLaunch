@@ -48,8 +48,6 @@ class AboutInfoPageFragment() : Fragment(R.layout.fragment_about_info_page) {
             dec2.text = InfoCenter.replaceName(context, R.string.about_dec2)
             dec3.text = InfoCenter.replaceName(context, R.string.about_dec3)
 
-            licenseButton.setOnClickListener { ZHTools.openLink(requireActivity(), "https://www.gnu.org/licenses/gpl-3.0.html") }
-
             val aboutAdapter = AboutRecyclerAdapter(this@AboutInfoPageFragment.mAboutData)
             aboutRecycler.apply {
                 layoutManager = LinearLayoutManager(requireContext())
@@ -70,8 +68,6 @@ class AboutInfoPageFragment() : Fragment(R.layout.fragment_about_info_page) {
             } else {
                 qqGroupButton.visibility = View.GONE
             }
-
-            discordButton.setOnClickListener { ZHTools.openLink(requireActivity(), "https://discord.gg/yDDkTHp4cJ") }
         }
     }
 

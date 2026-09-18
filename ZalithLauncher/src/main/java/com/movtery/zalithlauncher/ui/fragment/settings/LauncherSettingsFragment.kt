@@ -186,7 +186,10 @@ class LauncherSettingsFragment() : AbstractSettingsFragment(R.layout.settings_fr
             messageView.visibility = View.VISIBLE
             messageView.text = getString(R.string.curseforge_api_key_desc)
             textEdit.hint = getString(R.string.curseforge_api_key_hint)
-            textEdit.setText(com.movtery.zalithlauncher.InfoDistributor.CURSEFORGE_API_KEY)
+            
+            // Load saved key or fall back to build default
+            val savedKey = AllSettings.curseforgeApiKey.getValue()
+            textEdit.setText(savedKey.ifEmpty { com.movtery.zalithlauncher.InfoDistributor.CURSEFORGE_API_KEY })
             
             val dialog = android.app.AlertDialog.Builder(context)
                 .setView(dialogView)
@@ -194,7 +197,9 @@ class LauncherSettingsFragment() : AbstractSettingsFragment(R.layout.settings_fr
             
             cancelButton.setOnClickListener { dialog.dismiss() }
             confirmButton.setOnClickListener {
-                val key = textEdit.text.toString()
+                val key = textEdit.text.toString().trim()
+                AllSettings.curseforgeApiKey.put(key).save()
+                android.widget.Toast.makeText(context, "CurseForge API key saved", android.widget.Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             }
             
