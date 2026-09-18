@@ -16,7 +16,7 @@ class UrlManager {
         private const val URL_USER_AGENT: String = "${InfoDistributor.LAUNCHER_NAME}/${BuildConfig.VERSION_NAME}"
         @JvmField
         val TIME_OUT = Pair(8000, TimeUnit.MILLISECONDS)
-        const val URL_GITHUB_HOME: String = "https://api.github.com/repos/ZalithLauncher/Zalith-Info/contents/"
+        const val URL_GITHUB_HOME: String = "https://api.github.com/repos/ShadowMaybe/EclipseLaunch-Info/contents/"
         const val URL_MCMOD: String = "https://www.mcmod.cn/"
         const val URL_MINECRAFT: String = "https://www.minecraft.net/"
         const val URL_MINECRAFT_VERSION_REPOS: String = "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json"
