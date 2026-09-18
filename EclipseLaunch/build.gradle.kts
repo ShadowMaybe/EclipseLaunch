@@ -184,6 +184,7 @@ android {
         buildConfig = true
         viewBinding = true
         compose = true
+        resValues = true
     }
 
     buildToolsVersion = "36.0.0"
