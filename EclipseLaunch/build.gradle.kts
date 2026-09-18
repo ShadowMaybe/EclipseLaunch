@@ -4,8 +4,8 @@ import com.github.megatronking.stringfog.plugin.StringFogExtension
 
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android") version "2.4.10"
-    id("org.jetbrains.kotlin.plugin.compose") version "2.4.10"
+    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("stringfog")
 }
 apply(plugin = "stringfog")
