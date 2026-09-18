@@ -4,7 +4,8 @@ import com.github.megatronking.stringfog.plugin.StringFogExtension
 
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android") version "2.0.21"
+    id("org.jetbrains.kotlin.android") version "2.4.10"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.4.10"
     id("stringfog")
 }
 apply(plugin = "stringfog")
@@ -182,6 +183,7 @@ android {
         prefab = true
         buildConfig = true
         viewBinding = true
+        compose = true
     }
 
     buildToolsVersion = "34.0.0"
@@ -229,6 +231,25 @@ tasks.named("preBuild") {
 }
 
 dependencies {
+    // Compose BOM
+    val composeBom = platform("androidx.compose:compose-bom:2024.12.01")
+    implementation(composeBom)
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.foundation:foundation")
+    implementation("androidx.activity:activity-compose:1.9.3")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
+    implementation("androidx.navigation:navigation-compose:2.8.5")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+
+    // Miuix UI library (Compose Multiplatform)
+    implementation("top.yukonga.miuix.kmp:miuix-ui:0.9.4-rc01")
+    implementation("top.yukonga.miuix.kmp:miuix-preference:0.9.4-rc01")
+    implementation("top.yukonga.miuix.kmp:miuix-icons:0.9.4-rc01")
+
     implementation("javax.annotation:javax.annotation-api:1.3.2")
     implementation("commons-codec:commons-codec:1.17.1")
     // implementation("com.wu-man:android-bsf-api:3.1.3")
