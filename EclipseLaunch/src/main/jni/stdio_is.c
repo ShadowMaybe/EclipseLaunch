@@ -174,6 +174,6 @@ Java_net_kdt_pojavlaunch_utils_JREUtils_setupExitMethod(JNIEnv *env, jclass claz
                                                         jobject context) {
     exitTrap_ctx = (*env)->NewGlobalRef(env,context);
     (*env)->GetJavaVM(env,&exitTrap_jvm);
-    exitTrap_exitClass = (*env)->NewGlobalRef(env,(*env)->FindClass(env,"com/movtery/zalithlauncher/ui/activity/ErrorActivity"));
+    exitTrap_exitClass = (*env)->NewGlobalRef(env,(*env)->FindClass(env,"me/shadow/eclipselaunch/ui/activity/ErrorActivity"));
     exitTrap_staticMethod = (*env)->GetStaticMethodID(env,exitTrap_exitClass,"showExitMessage","(Landroid/content/Context;IZ)V");
 }
