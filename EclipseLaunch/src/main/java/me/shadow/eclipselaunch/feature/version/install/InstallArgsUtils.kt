@@ -21,6 +21,7 @@ class InstallArgsUtils(private val mcVersion: String, private val loaderVersion:
         intent.putExtra("javaArgs", args)
         intent.putExtra(JavaGUILauncherActivity.SUBSCRIBE_JVM_EXIT_EVENT, true)
         intent.putExtra(JavaGUILauncherActivity.FORCE_SHOW_LOG, true)
+        intent.putExtra("disableSecurityManager", true)
     }
 
     @Deprecated("不支持JRE 8进行安装，更高的JRE环境安装时，不会自动退出，因此暂时不使用这个函数进行配置安装")
@@ -37,6 +38,9 @@ class InstallArgsUtils(private val mcVersion: String, private val loaderVersion:
 
         val args = "-javaagent:${LibPath.FORGE_INSTALLER.absolutePath}=\"$loaderVersion\" -jar ${jarFile.absolutePath}"
         intent.putExtra("javaArgs", args)
+        intent.putExtra(JavaGUILauncherActivity.SUBSCRIBE_JVM_EXIT_EVENT, true)
+        intent.putExtra(JavaGUILauncherActivity.FORCE_SHOW_LOG, true)
+        intent.putExtra("disableSecurityManager", true)
     }
 
     @Throws(Throwable::class)
@@ -55,6 +59,9 @@ class InstallArgsUtils(private val mcVersion: String, private val loaderVersion:
                 "-javaagent:${LibPath.OPTIFINE_RENAMER.absolutePath}=\"$customName\" " +
                 "-jar ${jarFile.absolutePath}"
         intent.putExtra("javaArgs", args)
+        intent.putExtra(JavaGUILauncherActivity.SUBSCRIBE_JVM_EXIT_EVENT, true)
+        intent.putExtra(JavaGUILauncherActivity.FORCE_SHOW_LOG, true)
+        intent.putExtra("disableSecurityManager", true)
     }
 
     /**
