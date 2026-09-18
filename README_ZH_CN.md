@@ -4,7 +4,7 @@
 
 <div align="center">
 
-[![Android CI](https://github.com/ShadowMaybe/EclipseLaunch/actions/workflows/android.yml/badge.svg)](https://github.com/ShadowMaybe/EclipseLaunch/actions/workflows/android.yml)
+[![Build APK](https://github.com/ShadowMaybe/EclipseLaunch/actions/workflows/build.yml/badge.svg)](https://github.com/ShadowMaybe/EclipseLaunch/actions/workflows/build.yml)
 ![Downloads](https://img.shields.io/github/downloads/ShadowMaybe/EclipseLaunch/total)
 [![Sponsor](https://img.shields.io/badge/sponsor-30363D?logo=GitHub-Sponsors)](https://afdian.com/a/ShadowMaybe)
 

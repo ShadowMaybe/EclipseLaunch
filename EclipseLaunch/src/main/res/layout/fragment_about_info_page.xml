@@ -34,10 +34,10 @@
                 <ImageView
                     android:id="@+id/title"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_28sdp"
+                    android:layout_height="@dimen/_48sdp"
                     android:layout_marginTop="@dimen/_16sdp"
                     android:src="@drawable/app_name_title"
-                    android:scaleType="centerInside"
+                    android:scaleType="fitCenter"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
