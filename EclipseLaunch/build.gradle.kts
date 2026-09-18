@@ -51,7 +51,7 @@ configure<StringFogExtension> {
 
 android {
     namespace = nameId
-    compileSdk = 34
+    compileSdk = 37
 
     signingConfigs {
         create("releaseBuild") {
@@ -186,7 +186,7 @@ android {
         compose = true
     }
 
-    buildToolsVersion = "34.0.0"
+    buildToolsVersion = "36.0.0"
     kotlin {
         compilerOptions {
             jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
