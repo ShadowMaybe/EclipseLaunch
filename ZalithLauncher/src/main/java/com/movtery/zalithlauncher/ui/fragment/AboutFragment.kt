@@ -12,11 +12,8 @@ import com.movtery.anim.AnimPlayer
 import com.movtery.anim.animations.Animations
 import com.movtery.zalithlauncher.R
 import com.movtery.zalithlauncher.databinding.FragmentAboutBinding
-import com.movtery.zalithlauncher.ui.dialog.TipDialog
 import com.movtery.zalithlauncher.ui.fragment.about.AboutInfoPageFragment
-import com.movtery.zalithlauncher.ui.fragment.about.AboutSponsorPageFragment
 import com.movtery.zalithlauncher.utils.ZHTools
-import com.movtery.zalithlauncher.utils.path.UrlManager
 import com.movtery.zalithlauncher.utils.stringutils.StringUtils
 
 class AboutFragment : FragmentWithAnim(R.layout.fragment_about) {
@@ -46,14 +43,6 @@ class AboutFragment : FragmentWithAnim(R.layout.fragment_about) {
             appInfo.setOnClickListener{ StringUtils.copyText("text", appInfo.text.toString(), requireContext()) }
 
             returnButton.setOnClickListener { ZHTools.onBackPressed(requireActivity()) }
-            supportDevelopment.setOnClickListener {
-                TipDialog.Builder(requireActivity())
-                    .setTitle(R.string.request_sponsorship_title)
-                    .setMessage(R.string.request_sponsorship_message)
-                    .setConfirm(R.string.about_button_support_development)
-                    .setConfirmClickListener { ZHTools.openLink(requireActivity(), UrlManager.URL_SUPPORT) }
-                    .showDialog()
-            }
         }
     }
 
@@ -79,12 +68,9 @@ class AboutFragment : FragmentWithAnim(R.layout.fragment_about) {
         fragmentActivity: FragmentActivity,
         private val viewPager: ViewPager2
     ): FragmentStateAdapter(fragmentActivity) {
-        override fun getItemCount(): Int = 2
+        override fun getItemCount(): Int = 1
         override fun createFragment(position: Int): Fragment {
-            return when(position) {
-                0 -> AboutInfoPageFragment(viewPager)
-                else -> AboutSponsorPageFragment()
-            }
+            return AboutInfoPageFragment(viewPager)
         }
     }
 }

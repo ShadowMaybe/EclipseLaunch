@@ -1,7 +1,6 @@
 package com.movtery.zalithlauncher.feature.notice
 
 import com.movtery.zalithlauncher.feature.log.Logging
-import com.movtery.zalithlauncher.setting.AllSettings
 import com.movtery.zalithlauncher.utils.ZHTools
 import com.movtery.zalithlauncher.utils.http.CallUtils
 import com.movtery.zalithlauncher.utils.http.CallUtils.CallbackListener
@@ -19,9 +18,10 @@ class CheckNewNotice {
         @JvmStatic
         var noticeInfo: NoticeInfo? = null
         private var isChecking = false
+        private var lastCheckTime: Long = 0
 
         private fun checkCooling(): Boolean {
-            return ZHTools.getCurrentTimeMillis() - AllSettings.noticeCheck.getValue() > 2 * 60 * 1000 //2分钟冷却
+            return ZHTools.getCurrentTimeMillis() - lastCheckTime > 2 * 60 * 1000 //2分钟冷却
         }
 
         @JvmStatic
@@ -40,7 +40,7 @@ class CheckNewNotice {
             if (!checkCooling()) {
                 return
             } else {
-                AllSettings.noticeCheck.put(ZHTools.getCurrentTimeMillis()).save()
+                lastCheckTime = ZHTools.getCurrentTimeMillis()
             }
 
             CallUtils(object : CallbackListener {

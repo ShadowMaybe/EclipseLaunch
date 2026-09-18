@@ -107,8 +107,7 @@ class UpdateUtils {
 
                             val versionCode = launcherVersion.versionCode
                             fun checkPreRelease(): Boolean {
-                                return if (!launcherVersion.isPreRelease) true
-                                else ZHTools.isPreRelease() || AllSettings.acceptPreReleaseUpdates.getValue()
+                                return true
                             }
                             if (checkPreRelease() && ZHTools.getVersionCode() < versionCode) {
                                 runInUIThread {

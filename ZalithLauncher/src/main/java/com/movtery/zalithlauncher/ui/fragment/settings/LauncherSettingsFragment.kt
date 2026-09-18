@@ -9,7 +9,6 @@ import com.movtery.anim.animations.Animations
 import com.movtery.zalithlauncher.R
 import com.movtery.zalithlauncher.databinding.SettingsFragmentLauncherBinding
 import com.movtery.zalithlauncher.event.single.PageOpacityChangeEvent
-import com.movtery.zalithlauncher.feature.update.UpdateUtils
 import com.movtery.zalithlauncher.setting.AllSettings
 import com.movtery.zalithlauncher.ui.fragment.CustomBackgroundFragment
 import com.movtery.zalithlauncher.ui.fragment.FragmentWithAnim
@@ -169,15 +168,38 @@ class LauncherSettingsFragment() : AbstractSettingsFragment(R.layout.settings_fr
             context,
             binding.checkUpdateLayout
         ) {
-            UpdateUtils.checkDownloadedPackage(context, force = true, ignore = false)
+            android.widget.Toast.makeText(context, "Update checking is disabled", android.widget.Toast.LENGTH_SHORT).show()
         }
 
-        SwitchSettingsWrapper(
+        BaseSettingsWrapper(
             context,
-            AllSettings.acceptPreReleaseUpdates,
-            binding.acceptPreReleaseUpdatesLayout,
-            binding.acceptPreReleaseUpdates
-        )
+            binding.curseforgeApiKeyLayout
+        ) {
+            val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_text, null)
+            val titleView = dialogView.findViewById<android.widget.TextView>(R.id.title_view)
+            val messageView = dialogView.findViewById<android.widget.TextView>(R.id.message_view)
+            val textEdit = dialogView.findViewById<android.widget.EditText>(R.id.text_edit)
+            val cancelButton = dialogView.findViewById<android.widget.Button>(R.id.cancel_button)
+            val confirmButton = dialogView.findViewById<android.widget.Button>(R.id.confirm_button)
+            
+            titleView.text = getString(R.string.curseforge_api_key_title)
+            messageView.visibility = View.VISIBLE
+            messageView.text = getString(R.string.curseforge_api_key_desc)
+            textEdit.hint = getString(R.string.curseforge_api_key_hint)
+            textEdit.setText(com.movtery.zalithlauncher.InfoDistributor.CURSEFORGE_API_KEY)
+            
+            val dialog = android.app.AlertDialog.Builder(context)
+                .setView(dialogView)
+                .create()
+            
+            cancelButton.setOnClickListener { dialog.dismiss() }
+            confirmButton.setOnClickListener {
+                val key = textEdit.text.toString()
+                dialog.dismiss()
+            }
+            
+            dialog.show()
+        }
 
         val notificationPermissionRequest = SwitchSettingsWrapper(
             context,

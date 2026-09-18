@@ -10,8 +10,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
+
 import android.view.View;
 import android.widget.Toast;
 
@@ -55,8 +54,7 @@ import com.movtery.zalithlauncher.feature.mod.modpack.install.InstallExtra;
 import com.movtery.zalithlauncher.feature.mod.modpack.install.InstallLocalModPack;
 import com.movtery.zalithlauncher.feature.mod.modpack.install.ModPackInfo;
 import com.movtery.zalithlauncher.feature.mod.modpack.install.ModPackUtils;
-import com.movtery.zalithlauncher.feature.notice.CheckNewNotice;
-import com.movtery.zalithlauncher.feature.notice.NoticeInfo;
+
 import com.movtery.zalithlauncher.feature.update.UpdateUtils;
 import com.movtery.zalithlauncher.feature.version.Version;
 import com.movtery.zalithlauncher.feature.version.VersionsManager;
@@ -68,7 +66,7 @@ import com.movtery.zalithlauncher.setting.AllSettings;
 import com.movtery.zalithlauncher.task.Task;
 import com.movtery.zalithlauncher.task.TaskExecutors;
 import com.movtery.zalithlauncher.ui.activity.BaseActivity;
-import com.movtery.zalithlauncher.ui.activity.ErrorActivity;
+
 import com.movtery.zalithlauncher.ui.dialog.EditTextDialog;
 import com.movtery.zalithlauncher.ui.dialog.TipDialog;
 import com.movtery.zalithlauncher.ui.fragment.AccountFragment;
@@ -78,14 +76,13 @@ import com.movtery.zalithlauncher.ui.fragment.DownloadModFragment;
 import com.movtery.zalithlauncher.ui.fragment.SettingsFragment;
 import com.movtery.zalithlauncher.ui.subassembly.settingsbutton.ButtonType;
 import com.movtery.zalithlauncher.ui.subassembly.settingsbutton.SettingsButtonWrapper;
-import com.movtery.zalithlauncher.ui.subassembly.view.DraggableViewWrapper;
+
 import com.movtery.zalithlauncher.utils.StoragePermissionsUtils;
 import com.movtery.zalithlauncher.utils.ZHTools;
 import com.movtery.zalithlauncher.utils.anim.ViewAnimUtils;
 import com.movtery.zalithlauncher.utils.file.FileTools;
 import com.movtery.zalithlauncher.utils.image.ImageUtils;
-import com.movtery.zalithlauncher.utils.stringutils.ShiftDirection;
-import com.movtery.zalithlauncher.utils.stringutils.StringUtils;
+
 
 import net.kdt.pojavlaunch.authenticator.microsoft.MicrosoftBackgroundLogin;
 import net.kdt.pojavlaunch.contracts.OpenDocumentWithExtension;
@@ -107,11 +104,11 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Random;
+
 import java.util.concurrent.Future;
 
 public class LauncherActivity extends BaseActivity {
-    private final AnimPlayer noticeAnimPlayer = new AnimPlayer();
+
     public final ActivityResultLauncher<Object> modInstallerLauncher =
             registerForActivityResult(new OpenDocumentWithExtension("jar"), (uris) -> {
                 if (uris != null) {
@@ -123,7 +120,6 @@ public class LauncherActivity extends BaseActivity {
     private SettingsButtonWrapper mSettingsButtonWrapper;
     private ProgressServiceKeeper mProgressServiceKeeper;
     private NotificationManager mNotificationManager;
-    private Future<?> checkNotice;
 
     /* Allows to switch from one button "type" to another */
     private final FragmentManager.FragmentLifecycleCallbacks mFragmentCallbackListener = new FragmentManager.FragmentLifecycleCallbacks() {
@@ -379,8 +375,6 @@ public class LauncherActivity extends BaseActivity {
                 false
         );
 
-        checkNotice();
-
         //检查已经下载后的包，或者检查更新
         Task.runTask(() -> {
             UpdateUtils.checkDownloadedPackage(this, false, true);
@@ -440,14 +434,6 @@ public class LauncherActivity extends BaseActivity {
             }
         });
         binding.appTitleText.setText(InfoDistributor.APP_NAME);
-        binding.appTitleText.setOnClickListener(v -> {
-            String shiftedString = StringUtils.shiftString(binding.appTitleText.getText().toString(), ShiftDirection.RIGHT, 1);
-            if (new Random().nextInt(100) < 20 && shiftedString.equals(InfoDistributor.APP_NAME)) {
-                ErrorActivity.showEasterEgg(this);
-                return;
-            }
-            binding.appTitleText.setText(shiftedString);
-        });
 
         binding.progressLayout.observe(ProgressLayout.DOWNLOAD_MINECRAFT);
         binding.progressLayout.observe(ProgressLayout.UNPACK_RUNTIME);
@@ -455,36 +441,6 @@ public class LauncherActivity extends BaseActivity {
         binding.progressLayout.observe(ProgressLayout.LOGIN_ACCOUNT);
         binding.progressLayout.observe(ProgressLayout.DOWNLOAD_VERSION_LIST);
         binding.progressLayout.observe(ProgressLayout.CHECKING_MODS);
-
-        binding.noticeGotButton.setOnClickListener(v -> {
-            setNotice(false);
-            AllSettings.getNoticeDefault().put(false).save();
-        });
-        new DraggableViewWrapper(binding.noticeLayout, new DraggableViewWrapper.AttributesFetcher() {
-            @NonNull
-            @Override
-            public DraggableViewWrapper.ScreenPixels getScreenPixels() {
-                return new DraggableViewWrapper.ScreenPixels(0, 0,
-                        currentDisplayMetrics.widthPixels - binding.noticeLayout.getWidth(),
-                        currentDisplayMetrics.heightPixels - binding.noticeLayout.getHeight());
-            }
-
-            @NonNull
-            @Override
-            public int[] get() {
-                return new int[]{(int) binding.noticeLayout.getX(), (int) binding.noticeLayout.getY()};
-            }
-
-            @Override
-            public void set(int x, int y) {
-                binding.noticeLayout.setX(x);
-                binding.noticeLayout.setY(y);
-            }
-        }).init();
-
-        //愚人节彩蛋
-        if (ZHTools.checkDate(4, 1)) binding.hair.setVisibility(View.VISIBLE);
-        else binding.hair.setVisibility(View.GONE);
     }
 
     @Override
@@ -537,51 +493,6 @@ public class LauncherActivity extends BaseActivity {
                 }
             }
         });
-    }
-
-    private void checkNotice() {
-        checkNotice = TaskExecutors.getDefault().submit(() -> CheckNewNotice.checkNewNotice(noticeInfo -> {
-            if (checkNotice.isCancelled() || noticeInfo == null) {
-                return;
-            }
-            //当偏好设置内是开启通知栏 或者 检测到通知编号不为偏好设置里保存的值时，显示通知栏
-            if (AllSettings.getNoticeDefault().getValue() ||
-                    (noticeInfo.numbering != AllSettings.getNoticeNumbering().getValue())) {
-                TaskExecutors.runInUIThread(() -> setNotice(true));
-                AllSettings.getNoticeDefault().put(true)
-                        .put(AllSettings.getNoticeNumbering(), noticeInfo.numbering)
-                        .save();
-            }
-        }));
-    }
-
-    private void setNotice(boolean show) {
-        if (show) {
-            NoticeInfo noticeInfo = CheckNewNotice.getNoticeInfo();
-            if (noticeInfo != null) {
-                binding.noticeGotButton.setClickable(true);
-
-                binding.noticeTitleView.setText(noticeInfo.title);
-                binding.noticeMessageView.setText(noticeInfo.content);
-                binding.noticeDateView.setText(noticeInfo.date);
-
-                Linkify.addLinks(binding.noticeMessageView, Linkify.WEB_URLS);
-                binding.noticeMessageView.setMovementMethod(LinkMovementMethod.getInstance());
-
-                noticeAnimPlayer.clearEntries();
-                noticeAnimPlayer.apply(new AnimPlayer.Entry(binding.noticeLayout, Animations.BounceEnlarge))
-                        .setOnStart(() -> binding.noticeLayout.setVisibility(View.VISIBLE))
-                        .start();
-            }
-        } else {
-            binding.noticeGotButton.setClickable(false);
-
-            noticeAnimPlayer.clearEntries();
-            noticeAnimPlayer.apply(new AnimPlayer.Entry(binding.noticeLayout, Animations.BounceShrink))
-                    .setOnStart(() -> binding.noticeLayout.setVisibility(View.VISIBLE))
-                    .setOnEnd(() -> binding.noticeLayout.setVisibility(View.GONE))
-                    .start();
-        }
     }
 
     private void refreshBackground() {

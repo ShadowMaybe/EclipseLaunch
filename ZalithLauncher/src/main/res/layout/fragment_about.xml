@@ -58,17 +58,6 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <com.movtery.zalithlauncher.ui.view.AnimButton
-                android:id="@+id/support_development"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_8sdp"
-                android:text="@string/about_button_support_development"
-                app:layout_constraintBottom_toTopOf="@id/return_button"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"/>
-
             <com.movtery.zalithlauncher.ui.view.AnimTextView
                 android:id="@+id/app_info"
                 android:layout_width="match_parent"
