@@ -102,7 +102,7 @@ android {
         getByName("release") {
             // Don't set to true or java.awt will be a.a or something similar.
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             resValue("string", "storageProviderAuthorities", storageProviderId)
             signingConfig = signingConfigs.getByName("releaseBuild")
         }
