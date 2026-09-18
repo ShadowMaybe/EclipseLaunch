@@ -10,8 +10,8 @@ import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.WindowManager;
 
-import com.movtery.zalithlauncher.setting.AllSettings;
-import com.movtery.zalithlauncher.setting.AllStaticSettings;
+import me.shadow.eclipselaunch.setting.AllSettings;
+import me.shadow.eclipselaunch.setting.AllStaticSettings;
 
 import net.kdt.pojavlaunch.GrabListener;
 

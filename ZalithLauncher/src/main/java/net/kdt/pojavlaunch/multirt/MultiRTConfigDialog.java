@@ -9,7 +9,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.movtery.zalithlauncher.R;
+import me.shadow.eclipselaunch.R;
 
 public class MultiRTConfigDialog {
     private AlertDialog mDialog;

@@ -30,7 +30,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.movtery.zalithlauncher.ui.subassembly.filelist.FileRecyclerView
+            <me.shadow.eclipselaunch.ui.subassembly.filelist.FileRecyclerView
                 android:id="@+id/file_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -61,7 +61,7 @@
                     android:text="@string/file_nothing"
                     android:layout_marginStart="@dimen/_8sdp" />
 
-                <com.movtery.zalithlauncher.ui.view.AnimTextView
+                <me.shadow.eclipselaunch.ui.view.AnimTextView
                     android:id="@+id/go_download_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.movtery.zalithlauncher.ui.view.AnimCheckBox
+                <me.shadow.eclipselaunch.ui.view.AnimCheckBox
                     android:id="@+id/select_all"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.movtery.zalithlauncher.ui.view.AnimCheckBox
+                <me.shadow.eclipselaunch.ui.view.AnimCheckBox
                     android:id="@+id/multi_select_files"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

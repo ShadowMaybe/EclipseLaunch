@@ -14,11 +14,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.setting.AllSettings;
-import com.movtery.zalithlauncher.task.Task;
-import com.movtery.zalithlauncher.ui.dialog.SelectRuntimeDialog;
-import com.movtery.zalithlauncher.utils.runtime.RuntimeSelectedListener;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.setting.AllSettings;
+import me.shadow.eclipselaunch.task.Task;
+import me.shadow.eclipselaunch.ui.dialog.SelectRuntimeDialog;
+import me.shadow.eclipselaunch.utils.runtime.RuntimeSelectedListener;
 
 import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.Tools;

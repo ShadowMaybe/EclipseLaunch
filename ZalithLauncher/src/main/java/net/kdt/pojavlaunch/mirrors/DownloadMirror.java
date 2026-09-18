@@ -2,8 +2,8 @@ package net.kdt.pojavlaunch.mirrors;
 
 import androidx.annotation.Nullable;
 
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.setting.AllSettings;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.setting.AllSettings;
 
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.utils.DownloadUtils;

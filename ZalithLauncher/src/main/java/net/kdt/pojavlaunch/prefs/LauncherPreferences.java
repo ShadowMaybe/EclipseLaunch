@@ -9,12 +9,12 @@ import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Build;
 
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.feature.unpack.Jre;
-import com.movtery.zalithlauncher.setting.AllSettings;
-import com.movtery.zalithlauncher.setting.AllStaticSettings;
-import com.movtery.zalithlauncher.setting.Settings;
-import com.movtery.zalithlauncher.ui.activity.BaseActivity;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.feature.unpack.Jre;
+import me.shadow.eclipselaunch.setting.AllSettings;
+import me.shadow.eclipselaunch.setting.AllStaticSettings;
+import me.shadow.eclipselaunch.setting.Settings;
+import me.shadow.eclipselaunch.ui.activity.BaseActivity;
 
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;

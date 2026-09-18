@@ -14,8 +14,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.setting.AllSettings;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.setting.AllSettings;
 
 import net.kdt.pojavlaunch.LwjglGlfwKeycode;
 import net.kdt.pojavlaunch.MainActivity;

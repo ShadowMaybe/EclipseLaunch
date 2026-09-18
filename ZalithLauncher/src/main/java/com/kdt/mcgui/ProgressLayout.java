@@ -13,8 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.feature.log.Logging;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.feature.log.Logging;
 
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.progresskeeper.ProgressListener;

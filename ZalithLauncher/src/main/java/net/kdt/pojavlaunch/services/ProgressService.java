@@ -16,11 +16,11 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
-import com.movtery.zalithlauncher.InfoCenter;
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.task.TaskExecutors;
-import com.movtery.zalithlauncher.utils.ZHTools;
+import me.shadow.eclipselaunch.InfoCenter;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.task.TaskExecutors;
+import me.shadow.eclipselaunch.utils.ZHTools;
 
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;

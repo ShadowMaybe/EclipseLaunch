@@ -14,17 +14,17 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.gson.JsonSyntaxException;
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.setting.AllSettings;
-import com.movtery.zalithlauncher.task.Task;
-import com.movtery.zalithlauncher.task.TaskExecutors;
-import com.movtery.zalithlauncher.ui.dialog.EditControlInfoDialog;
-import com.movtery.zalithlauncher.ui.dialog.SelectControlsDialog;
-import com.movtery.zalithlauncher.ui.dialog.TipDialog;
-import com.movtery.zalithlauncher.ui.subassembly.customcontrols.ControlInfoData;
-import com.movtery.zalithlauncher.utils.path.PathManager;
-import com.movtery.zalithlauncher.utils.stringutils.StringUtilsKt;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.setting.AllSettings;
+import me.shadow.eclipselaunch.task.Task;
+import me.shadow.eclipselaunch.task.TaskExecutors;
+import me.shadow.eclipselaunch.ui.dialog.EditControlInfoDialog;
+import me.shadow.eclipselaunch.ui.dialog.SelectControlsDialog;
+import me.shadow.eclipselaunch.ui.dialog.TipDialog;
+import me.shadow.eclipselaunch.ui.subassembly.customcontrols.ControlInfoData;
+import me.shadow.eclipselaunch.utils.path.PathManager;
+import me.shadow.eclipselaunch.utils.stringutils.StringUtilsKt;
 
 import net.kdt.pojavlaunch.MinecraftGLSurface;
 import net.kdt.pojavlaunch.Tools;

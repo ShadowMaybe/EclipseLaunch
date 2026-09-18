@@ -11,8 +11,8 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.listener.SimpleTextWatcher;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.listener.SimpleTextWatcher;
 
 public class ColorSelector implements HueSelectionListener, RectangleSelectionListener, AlphaSelectionListener, SimpleTextWatcher {
     private static final int ALPHA_MASK = ~(0xFF << 24);

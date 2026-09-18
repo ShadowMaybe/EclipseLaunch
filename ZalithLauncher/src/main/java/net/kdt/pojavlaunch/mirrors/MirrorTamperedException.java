@@ -6,8 +6,8 @@ import android.text.Html;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.setting.AllSettings;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.setting.AllSettings;
 
 import net.kdt.pojavlaunch.ShowErrorActivity;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;

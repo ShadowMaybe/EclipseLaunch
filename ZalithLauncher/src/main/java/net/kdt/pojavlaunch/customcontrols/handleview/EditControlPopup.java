@@ -26,10 +26,10 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.kdt.DefocusableScrollView;
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.listener.SimpleTextWatcher;
-import com.movtery.zalithlauncher.ui.dialog.KeyboardDialog;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.listener.SimpleTextWatcher;
+import me.shadow.eclipselaunch.ui.dialog.KeyboardDialog;
 
 import net.kdt.pojavlaunch.EfficientAndroidLWJGLKeycode;
 import net.kdt.pojavlaunch.colorselector.ColorSelector;

@@ -15,11 +15,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.databinding.FragmentMicrosoftLoginBinding;
-import com.movtery.zalithlauncher.event.value.MicrosoftLoginEvent;
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.ui.fragment.BaseFragment;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.databinding.FragmentMicrosoftLoginBinding;
+import me.shadow.eclipselaunch.event.value.MicrosoftLoginEvent;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.ui.fragment.BaseFragment;
 
 import org.greenrobot.eventbus.EventBus;
 

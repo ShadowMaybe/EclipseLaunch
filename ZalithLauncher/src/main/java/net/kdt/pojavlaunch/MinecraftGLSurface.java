@@ -21,12 +21,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
-import com.movtery.zalithlauncher.event.single.RefreshHotbarEvent;
-import com.movtery.zalithlauncher.feature.MCOptions;
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.setting.AllSettings;
-import com.movtery.zalithlauncher.setting.AllStaticSettings;
-import com.movtery.zalithlauncher.ui.activity.BaseActivity;
+import me.shadow.eclipselaunch.event.single.RefreshHotbarEvent;
+import me.shadow.eclipselaunch.feature.MCOptions;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.setting.AllSettings;
+import me.shadow.eclipselaunch.setting.AllStaticSettings;
+import me.shadow.eclipselaunch.ui.activity.BaseActivity;
 
 import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.customcontrols.gamepad.DefaultDataProvider;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.movtery.zalithlauncher.ui.layout.AnimConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<me.shadow.eclipselaunch.ui.layout.AnimConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/_9ssp"
-            tools:text="Zalith"
+            tools:text="Eclipse"
             tools:ignore="SmallSp" />
 
     </LinearLayout>
@@ -107,4 +107,4 @@
         app:layout_constraintStart_toStartOf="@+id/body_textview"
         app:layout_constraintTop_toBottomOf="@+id/body_textview"/>
 
-</com.movtery.zalithlauncher.ui.layout.AnimConstraintLayout>
+</me.shadow.eclipselaunch.ui.layout.AnimConstraintLayout>

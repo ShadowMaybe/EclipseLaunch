@@ -1,6 +1,6 @@
 package net.kdt.pojavlaunch.customcontrols;
 
-import static com.movtery.zalithlauncher.context.ContextExecutor.getString;
+import static me.shadow.eclipselaunch.context.ContextExecutor.getString;
 import static net.kdt.pojavlaunch.LwjglGlfwKeycode.GLFW_KEY_UNKNOWN;
 
 import android.content.Context;
@@ -8,9 +8,9 @@ import android.util.ArrayMap;
 
 import androidx.annotation.Keep;
 
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.setting.AllSettings;
-import com.movtery.zalithlauncher.utils.stringutils.StringUtils;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.setting.AllSettings;
+import me.shadow.eclipselaunch.utils.stringutils.StringUtils;
 
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.customcontrols.buttons.ControlInterface;

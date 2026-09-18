@@ -2,7 +2,7 @@ package net.kdt.pojavlaunch;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.P;
-import static com.movtery.zalithlauncher.setting.AllStaticSettings.notchSize;
+import static me.shadow.eclipselaunch.setting.AllStaticSettings.notchSize;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -29,20 +29,20 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.movtery.zalithlauncher.InfoDistributor;
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.context.ContextExecutor;
-import com.movtery.zalithlauncher.utils.LauncherProfiles;
-import com.movtery.zalithlauncher.feature.customprofilepath.ProfilePathHome;
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.feature.version.Version;
-import com.movtery.zalithlauncher.task.Task;
-import com.movtery.zalithlauncher.ui.activity.BaseActivity;
-import com.movtery.zalithlauncher.ui.dialog.EditTextDialog;
-import com.movtery.zalithlauncher.utils.path.PathManager;
-import com.movtery.zalithlauncher.utils.ZHTools;
-import com.movtery.zalithlauncher.utils.runtime.SelectRuntimeUtils;
-import com.movtery.zalithlauncher.utils.stringutils.StringUtils;
+import me.shadow.eclipselaunch.InfoDistributor;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.context.ContextExecutor;
+import me.shadow.eclipselaunch.utils.LauncherProfiles;
+import me.shadow.eclipselaunch.feature.customprofilepath.ProfilePathHome;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.feature.version.Version;
+import me.shadow.eclipselaunch.task.Task;
+import me.shadow.eclipselaunch.ui.activity.BaseActivity;
+import me.shadow.eclipselaunch.ui.dialog.EditTextDialog;
+import me.shadow.eclipselaunch.utils.path.PathManager;
+import me.shadow.eclipselaunch.utils.ZHTools;
+import me.shadow.eclipselaunch.utils.runtime.SelectRuntimeUtils;
+import me.shadow.eclipselaunch.utils.stringutils.StringUtils;
 
 import net.kdt.pojavlaunch.fragments.MainMenuFragment;
 import net.kdt.pojavlaunch.lifecycle.ContextExecutorTask;

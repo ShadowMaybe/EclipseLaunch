@@ -3,8 +3,8 @@ package net.kdt.pojavlaunch.modloaders.modpacks.api;
 import android.util.ArrayMap;
 
 import com.google.gson.Gson;
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.utils.path.UrlManager;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.utils.path.UrlManager;
 
 import net.kdt.pojavlaunch.Tools;
 

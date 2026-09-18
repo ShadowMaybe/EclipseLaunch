@@ -4,12 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.kdt.mcgui.ProgressLayout;
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.feature.customprofilepath.ProfilePathHome;
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.setting.AllSettings;
-import com.movtery.zalithlauncher.task.Task;
-import com.movtery.zalithlauncher.utils.path.PathManager;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.feature.customprofilepath.ProfilePathHome;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.setting.AllSettings;
+import me.shadow.eclipselaunch.task.Task;
+import me.shadow.eclipselaunch.utils.path.PathManager;
 
 import net.kdt.pojavlaunch.JAssetInfo;
 import net.kdt.pojavlaunch.JAssets;

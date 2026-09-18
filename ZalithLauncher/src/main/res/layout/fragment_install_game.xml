@@ -41,7 +41,7 @@
             app:layout_constraintStart_toEndOf="@id/back"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.movtery.zalithlauncher.ui.view.AnimEditText
+        <me.shadow.eclipselaunch.ui.view.AnimEditText
             android:id="@+id/name_edit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
-                <com.movtery.zalithlauncher.ui.layout.AnimConstraintLayout
+                <me.shadow.eclipselaunch.ui.layout.AnimConstraintLayout
                     android:id="@+id/optifine_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -164,9 +164,9 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                </com.movtery.zalithlauncher.ui.layout.AnimConstraintLayout>
+                </me.shadow.eclipselaunch.ui.layout.AnimConstraintLayout>
 
-                <com.movtery.zalithlauncher.ui.layout.AnimConstraintLayout
+                <me.shadow.eclipselaunch.ui.layout.AnimConstraintLayout
                     android:id="@+id/forge_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -242,11 +242,11 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                </com.movtery.zalithlauncher.ui.layout.AnimConstraintLayout>
+                </me.shadow.eclipselaunch.ui.layout.AnimConstraintLayout>
 
             </LinearLayout>
 
-            <com.movtery.zalithlauncher.ui.layout.AnimConstraintLayout
+            <me.shadow.eclipselaunch.ui.layout.AnimConstraintLayout
                 android:id="@+id/neoforge_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -323,7 +323,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-            </com.movtery.zalithlauncher.ui.layout.AnimConstraintLayout>
+            </me.shadow.eclipselaunch.ui.layout.AnimConstraintLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -332,7 +332,7 @@
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
-                <com.movtery.zalithlauncher.ui.layout.AnimConstraintLayout
+                <me.shadow.eclipselaunch.ui.layout.AnimConstraintLayout
                     android:id="@+id/fabric_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -408,9 +408,9 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                </com.movtery.zalithlauncher.ui.layout.AnimConstraintLayout>
+                </me.shadow.eclipselaunch.ui.layout.AnimConstraintLayout>
 
-                <com.movtery.zalithlauncher.ui.layout.AnimConstraintLayout
+                <me.shadow.eclipselaunch.ui.layout.AnimConstraintLayout
                     android:id="@+id/fabric_api_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -486,7 +486,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                </com.movtery.zalithlauncher.ui.layout.AnimConstraintLayout>
+                </me.shadow.eclipselaunch.ui.layout.AnimConstraintLayout>
 
             </LinearLayout>
 
@@ -497,7 +497,7 @@
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
-                <com.movtery.zalithlauncher.ui.layout.AnimConstraintLayout
+                <me.shadow.eclipselaunch.ui.layout.AnimConstraintLayout
                     android:id="@+id/quilt_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -573,9 +573,9 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                </com.movtery.zalithlauncher.ui.layout.AnimConstraintLayout>
+                </me.shadow.eclipselaunch.ui.layout.AnimConstraintLayout>
 
-                <com.movtery.zalithlauncher.ui.layout.AnimConstraintLayout
+                <me.shadow.eclipselaunch.ui.layout.AnimConstraintLayout
                     android:id="@+id/quilt_api_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -651,7 +651,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                </com.movtery.zalithlauncher.ui.layout.AnimConstraintLayout>
+                </me.shadow.eclipselaunch.ui.layout.AnimConstraintLayout>
 
             </LinearLayout>
 

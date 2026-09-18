@@ -5,11 +5,11 @@ import static org.apache.commons.io.FileUtils.listFiles;
 import android.system.Os;
 
 import com.kdt.mcgui.ProgressLayout;
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.feature.unpack.Jre;
-import com.movtery.zalithlauncher.utils.path.PathManager;
-import com.movtery.zalithlauncher.utils.stringutils.SortStrings;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.feature.unpack.Jre;
+import me.shadow.eclipselaunch.utils.path.PathManager;
+import me.shadow.eclipselaunch.utils.stringutils.SortStrings;
 
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.utils.MathUtils;

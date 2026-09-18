@@ -5,9 +5,9 @@ import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.movtery.zalithlauncher.setting.AllSettings;
-import com.movtery.zalithlauncher.setting.AllStaticSettings;
-import com.movtery.zalithlauncher.support.touch_controller.ContactHandler;
+import me.shadow.eclipselaunch.setting.AllSettings;
+import me.shadow.eclipselaunch.setting.AllStaticSettings;
+import me.shadow.eclipselaunch.support.touch_controller.ContactHandler;
 
 import org.lwjgl.glfw.CallbackBridge;
 

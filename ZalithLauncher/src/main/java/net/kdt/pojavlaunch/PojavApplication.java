@@ -1,8 +1,8 @@
 package net.kdt.pojavlaunch;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.movtery.zalithlauncher.utils.ZHTools.getVersionCode;
-import static com.movtery.zalithlauncher.utils.ZHTools.getVersionName;
+import static me.shadow.eclipselaunch.utils.ZHTools.getVersionCode;
+import static me.shadow.eclipselaunch.utils.ZHTools.getVersionName;
 
 import android.app.Application;
 import android.content.Context;
@@ -16,14 +16,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 
-import com.movtery.zalithlauncher.InfoDistributor;
-import com.movtery.zalithlauncher.context.ContextExecutor;
-import com.movtery.zalithlauncher.context.LocaleHelper;
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.setting.AllSettings;
-import com.movtery.zalithlauncher.ui.activity.ErrorActivity;
-import com.movtery.zalithlauncher.utils.path.PathManager;
-import com.movtery.zalithlauncher.utils.ZHTools;
+import me.shadow.eclipselaunch.InfoDistributor;
+import me.shadow.eclipselaunch.context.ContextExecutor;
+import me.shadow.eclipselaunch.context.LocaleHelper;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.setting.AllSettings;
+import me.shadow.eclipselaunch.ui.activity.ErrorActivity;
+import me.shadow.eclipselaunch.utils.path.PathManager;
+import me.shadow.eclipselaunch.utils.ZHTools;
 
 import net.kdt.pojavlaunch.utils.FileUtils;
 
@@ -34,7 +34,7 @@ import java.util.Date;
 import java.util.Objects;
 
 public class PojavApplication extends Application {
-	public static final String CRASH_REPORT_TAG = "ZalithCrashReport";
+	public static final String CRASH_REPORT_TAG = "EclipseCrashReport";
 
 	@Override
 	public void onCreate() {

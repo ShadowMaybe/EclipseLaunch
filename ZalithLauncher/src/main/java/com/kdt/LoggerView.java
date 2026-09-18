@@ -11,9 +11,9 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.movtery.anim.animations.Animations;
-import com.movtery.zalithlauncher.databinding.ViewLoggerBinding;
-import com.movtery.zalithlauncher.setting.AllSettings;
-import com.movtery.zalithlauncher.utils.anim.ViewAnimUtils;
+import me.shadow.eclipselaunch.databinding.ViewLoggerBinding;
+import me.shadow.eclipselaunch.setting.AllSettings;
+import me.shadow.eclipselaunch.utils.anim.ViewAnimUtils;
 
 import net.kdt.pojavlaunch.Logger;
 

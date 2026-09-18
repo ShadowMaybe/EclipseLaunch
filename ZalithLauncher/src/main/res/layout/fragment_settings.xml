@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.movtery.zalithlauncher.ui.fragment.SettingsFragment">
+    tools:context="me.shadow.eclipselaunch.ui.fragment.SettingsFragment">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/settings_viewpager"
@@ -46,7 +46,7 @@
             app:tab_indicator_x_offset="@dimen/_6sdp"
             app:tab_orientation="VERTICAL">
 
-            <com.movtery.zalithlauncher.ui.layout.AnimRelativeLayout
+            <me.shadow.eclipselaunch.ui.layout.AnimRelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_8sdp"
@@ -74,9 +74,9 @@
                     android:layout_toEndOf="@+id/video_image"
                     android:text="@string/setting_category_video"
                     android:textColor="@color/black_or_white" />
-            </com.movtery.zalithlauncher.ui.layout.AnimRelativeLayout>
+            </me.shadow.eclipselaunch.ui.layout.AnimRelativeLayout>
 
-            <com.movtery.zalithlauncher.ui.layout.AnimRelativeLayout
+            <me.shadow.eclipselaunch.ui.layout.AnimRelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_8sdp"
@@ -105,9 +105,9 @@
                     android:layout_toEndOf="@+id/controls_image"
                     android:text="@string/setting_category_control"
                     android:textColor="@color/black_or_white" />
-            </com.movtery.zalithlauncher.ui.layout.AnimRelativeLayout>
+            </me.shadow.eclipselaunch.ui.layout.AnimRelativeLayout>
 
-            <com.movtery.zalithlauncher.ui.layout.AnimRelativeLayout
+            <me.shadow.eclipselaunch.ui.layout.AnimRelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_8sdp"
@@ -136,9 +136,9 @@
                     android:layout_toEndOf="@+id/game_image"
                     android:text="@string/setting_category_game"
                     android:textColor="@color/black_or_white" />
-            </com.movtery.zalithlauncher.ui.layout.AnimRelativeLayout>
+            </me.shadow.eclipselaunch.ui.layout.AnimRelativeLayout>
 
-            <com.movtery.zalithlauncher.ui.layout.AnimRelativeLayout
+            <me.shadow.eclipselaunch.ui.layout.AnimRelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_8sdp"
@@ -167,9 +167,9 @@
                     android:layout_toEndOf="@+id/launcher_image"
                     android:text="@string/setting_category_launcher"
                     android:textColor="@color/black_or_white" />
-            </com.movtery.zalithlauncher.ui.layout.AnimRelativeLayout>
+            </me.shadow.eclipselaunch.ui.layout.AnimRelativeLayout>
 
-            <com.movtery.zalithlauncher.ui.layout.AnimRelativeLayout
+            <me.shadow.eclipselaunch.ui.layout.AnimRelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_8sdp"
@@ -198,7 +198,7 @@
                     android:layout_toEndOf="@+id/experimental_image"
                     android:text="@string/setting_category_experimental"
                     android:textColor="@color/black_or_white" />
-            </com.movtery.zalithlauncher.ui.layout.AnimRelativeLayout>
+            </me.shadow.eclipselaunch.ui.layout.AnimRelativeLayout>
 
         </com.angcyo.tablayout.DslTabLayout>
 

@@ -14,14 +14,14 @@ import androidx.annotation.Nullable;
 
 import com.movtery.anim.AnimPlayer;
 import com.movtery.anim.animations.Animations;
-import com.movtery.zalithlauncher.event.single.MCOptionChangeEvent;
-import com.movtery.zalithlauncher.event.single.RefreshHotbarEvent;
-import com.movtery.zalithlauncher.event.value.HotbarChangeEvent;
-import com.movtery.zalithlauncher.feature.MCOptions;
-import com.movtery.zalithlauncher.setting.AllSettings;
-import com.movtery.zalithlauncher.setting.AllStaticSettings;
-import com.movtery.zalithlauncher.ui.subassembly.hotbar.HotbarType;
-import com.movtery.zalithlauncher.ui.subassembly.hotbar.HotbarUtils;
+import me.shadow.eclipselaunch.event.single.MCOptionChangeEvent;
+import me.shadow.eclipselaunch.event.single.RefreshHotbarEvent;
+import me.shadow.eclipselaunch.event.value.HotbarChangeEvent;
+import me.shadow.eclipselaunch.feature.MCOptions;
+import me.shadow.eclipselaunch.setting.AllSettings;
+import me.shadow.eclipselaunch.setting.AllStaticSettings;
+import me.shadow.eclipselaunch.ui.subassembly.hotbar.HotbarType;
+import me.shadow.eclipselaunch.ui.subassembly.hotbar.HotbarUtils;
 
 import net.kdt.pojavlaunch.GrabListener;
 import net.kdt.pojavlaunch.LwjglGlfwKeycode;

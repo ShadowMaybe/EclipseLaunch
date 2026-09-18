@@ -27,8 +27,8 @@ val getBuildType = {
     buildType
 }
 
-val nameId = "com.movtery.zalithlauncher"
-val generatedZalithDir = file("$buildDir/generated/source/zalith/java")
+val nameId = "me.shadow.eclipselaunch"
+val generatedEclipseDir = file("$buildDir/generated/source/eclipse/java")
 val launcherAPPName = project.findProperty("launcher_app_name") as? String ?: error("The \"launcher_app_name\" property is not set in gradle.properties.")
 val launcherName = project.findProperty("launcher_name") as? String ?: error("The \"launcher_name\" property is not set in gradle.properties.")
 val launcherVersionCode = (project.findProperty("launcher_version_code") as? String)?.toIntOrNull() ?: error("The \"launcher_version_code\" property is not set as an integer in gradle.properties.")
@@ -107,7 +107,7 @@ android {
         }
     }
 
-    sourceSets["main"].java.srcDirs(generatedZalithDir)
+    sourceSets["main"].java.srcDirs(generatedEclipseDir)
 
     androidComponents {
         onVariants { variant ->
@@ -220,7 +220,7 @@ tasks.register("generateInfoDistributor") {
             "APP_NAME" to project.property("launcher_app_name").toString(),
             "BUILD_TYPE" to getBuildType()
         )
-        generateJavaClass(generatedZalithDir, "com.movtery.zalithlauncher", "InfoDistributor", constantMap)
+        generateJavaClass(generatedEclipseDir, "me.shadow.eclipselaunch", "InfoDistributor", constantMap)
     }
 }
 

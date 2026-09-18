@@ -4,11 +4,11 @@ import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 
 import com.google.gson.JsonSyntaxException;
-import com.movtery.zalithlauncher.feature.accounts.AccountsManager;
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.utils.path.PathManager;
-import com.movtery.zalithlauncher.utils.skin.SkinFileDownloader;
-import com.movtery.zalithlauncher.utils.stringutils.StringUtilsKt;
+import me.shadow.eclipselaunch.feature.accounts.AccountsManager;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.utils.path.PathManager;
+import me.shadow.eclipselaunch.utils.skin.SkinFileDownloader;
+import me.shadow.eclipselaunch.utils.stringutils.StringUtilsKt;
 
 import net.kdt.pojavlaunch.Tools;
 

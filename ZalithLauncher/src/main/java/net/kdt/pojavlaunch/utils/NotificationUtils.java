@@ -7,7 +7,7 @@ import android.content.Intent;
 
 import androidx.core.app.NotificationCompat;
 
-import com.movtery.zalithlauncher.R;
+import me.shadow.eclipselaunch.R;
 
 import net.kdt.pojavlaunch.Tools;
 

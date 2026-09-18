@@ -34,11 +34,11 @@ import android.widget.ImageView;
 
 import androidx.core.math.MathUtils;
 
-import com.movtery.zalithlauncher.event.single.MCOptionChangeEvent;
-import com.movtery.zalithlauncher.feature.MCOptions;
-import com.movtery.zalithlauncher.setting.AllSettings;
-import com.movtery.zalithlauncher.setting.AllStaticSettings;
-import com.movtery.zalithlauncher.utils.ZHTools;
+import me.shadow.eclipselaunch.event.single.MCOptionChangeEvent;
+import me.shadow.eclipselaunch.feature.MCOptions;
+import me.shadow.eclipselaunch.setting.AllSettings;
+import me.shadow.eclipselaunch.setting.AllStaticSettings;
+import me.shadow.eclipselaunch.utils.ZHTools;
 
 import net.kdt.pojavlaunch.GrabListener;
 import net.kdt.pojavlaunch.LwjglGlfwKeycode;

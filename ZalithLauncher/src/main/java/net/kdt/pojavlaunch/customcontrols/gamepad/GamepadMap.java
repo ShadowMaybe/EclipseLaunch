@@ -2,7 +2,7 @@ package net.kdt.pojavlaunch.customcontrols.gamepad;
 
 import android.content.Context;
 
-import com.movtery.zalithlauncher.R;
+import me.shadow.eclipselaunch.R;
 
 import net.kdt.pojavlaunch.LwjglGlfwKeycode;
 

@@ -2,10 +2,10 @@ package net.kdt.pojavlaunch.utils;
 
 import androidx.annotation.Nullable;
 
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.utils.path.PathManager;
-import com.movtery.zalithlauncher.utils.ZHTools;
-import com.movtery.zalithlauncher.utils.path.UrlManager;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.utils.path.PathManager;
+import me.shadow.eclipselaunch.utils.ZHTools;
+import me.shadow.eclipselaunch.utils.path.UrlManager;
 
 import net.kdt.pojavlaunch.Tools;
 

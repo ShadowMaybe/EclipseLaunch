@@ -17,7 +17,7 @@
  */
 package org.jackhuang.hmcl.util;
 
-import com.movtery.zalithlauncher.utils.stringutils.StringUtilsKt;
+import me.shadow.eclipselaunch.utils.stringutils.StringUtilsKt;
 
 import java.util.ArrayList;
 import java.util.Collections;

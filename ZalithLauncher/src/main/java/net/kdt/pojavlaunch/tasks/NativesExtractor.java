@@ -1,6 +1,6 @@
 package net.kdt.pojavlaunch.tasks;
 
-import com.movtery.zalithlauncher.utils.path.PathManager;
+import me.shadow.eclipselaunch.utils.path.PathManager;
 
 import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.utils.FileUtils;

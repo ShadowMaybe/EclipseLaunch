@@ -6,8 +6,8 @@ import android.util.AttributeSet;
 
 import androidx.annotation.Nullable;
 
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.ui.view.AnimButton;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.ui.view.AnimButton;
 
 import net.kdt.pojavlaunch.customcontrols.buttons.ControlInterface;
 

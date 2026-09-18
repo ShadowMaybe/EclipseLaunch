@@ -132,7 +132,7 @@
         app:layout_constraintStart_toEndOf="@+id/constraintLayout"
         app:layout_constraintTop_toBottomOf="@+id/top_view">
 
-        <com.movtery.zalithlauncher.ui.view.AnimButton
+        <me.shadow.eclipselaunch.ui.view.AnimButton
             android:id="@+id/share_log"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -140,7 +140,7 @@
             android:text="@string/main_share_logs"
             app:layout_constraintBottom_toTopOf="@id/error_restart"/>
 
-        <com.movtery.zalithlauncher.ui.view.AnimButton
+        <me.shadow.eclipselaunch.ui.view.AnimButton
             android:id="@+id/error_restart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
             android:text="@string/generic_restart"
             app:layout_constraintBottom_toTopOf="@id/error_confirm"/>
 
-        <com.movtery.zalithlauncher.ui.view.AnimButton
+        <me.shadow.eclipselaunch.ui.view.AnimButton
             android:id="@+id/error_confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

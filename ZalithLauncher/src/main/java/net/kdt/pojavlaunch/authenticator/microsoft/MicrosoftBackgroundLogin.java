@@ -7,12 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.kdt.mcgui.ProgressLayout;
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.feature.accounts.AccountType;
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.task.Task;
-import com.movtery.zalithlauncher.task.TaskExecutors;
-import com.movtery.zalithlauncher.utils.path.UrlManager;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.feature.accounts.AccountType;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.task.Task;
+import me.shadow.eclipselaunch.task.TaskExecutors;
+import me.shadow.eclipselaunch.utils.path.UrlManager;
 
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.authenticator.listener.DoneListener;

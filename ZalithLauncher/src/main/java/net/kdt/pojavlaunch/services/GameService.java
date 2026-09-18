@@ -17,8 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.movtery.zalithlauncher.InfoCenter;
-import com.movtery.zalithlauncher.R;
+import me.shadow.eclipselaunch.InfoCenter;
+import me.shadow.eclipselaunch.R;
 
 import net.kdt.pojavlaunch.MainActivity;
 import net.kdt.pojavlaunch.Tools;

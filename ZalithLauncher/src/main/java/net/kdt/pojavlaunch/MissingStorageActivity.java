@@ -5,8 +5,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.movtery.zalithlauncher.InfoCenter;
-import com.movtery.zalithlauncher.R;
+import me.shadow.eclipselaunch.InfoCenter;
+import me.shadow.eclipselaunch.R;
 
 public class MissingStorageActivity extends AppCompatActivity {
     @Override

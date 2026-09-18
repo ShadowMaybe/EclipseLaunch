@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import androidx.core.math.MathUtils;
 
-import com.movtery.zalithlauncher.R;
+import me.shadow.eclipselaunch.R;
 
 import net.kdt.pojavlaunch.customcontrols.buttons.ControlInterface;
 

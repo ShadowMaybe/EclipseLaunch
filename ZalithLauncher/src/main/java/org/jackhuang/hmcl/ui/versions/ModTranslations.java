@@ -19,9 +19,9 @@ package org.jackhuang.hmcl.ui.versions;
 
 import static org.jackhuang.hmcl.util.Pair.pair;
 
-import com.movtery.zalithlauncher.feature.download.enums.Classify;
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.utils.stringutils.StringUtilsKt;
+import me.shadow.eclipselaunch.feature.download.enums.Classify;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.utils.stringutils.StringUtilsKt;
 
 import net.kdt.pojavlaunch.Tools;
 

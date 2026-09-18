@@ -7,14 +7,14 @@ import android.widget.FrameLayout;
 import androidx.activity.OnBackPressedCallback;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.movtery.zalithlauncher.databinding.ActivityCustomControlsBinding;
-import com.movtery.zalithlauncher.databinding.ViewControlMenuBinding;
-import com.movtery.zalithlauncher.feature.background.BackgroundManager;
-import com.movtery.zalithlauncher.feature.background.BackgroundType;
-import com.movtery.zalithlauncher.setting.AllSettings;
-import com.movtery.zalithlauncher.ui.activity.BaseActivity;
-import com.movtery.zalithlauncher.ui.subassembly.menu.ControlMenu;
-import com.movtery.zalithlauncher.ui.subassembly.view.GameMenuViewWrapper;
+import me.shadow.eclipselaunch.databinding.ActivityCustomControlsBinding;
+import me.shadow.eclipselaunch.databinding.ViewControlMenuBinding;
+import me.shadow.eclipselaunch.feature.background.BackgroundManager;
+import me.shadow.eclipselaunch.feature.background.BackgroundType;
+import me.shadow.eclipselaunch.setting.AllSettings;
+import me.shadow.eclipselaunch.ui.activity.BaseActivity;
+import me.shadow.eclipselaunch.ui.subassembly.menu.ControlMenu;
+import me.shadow.eclipselaunch.ui.subassembly.view.GameMenuViewWrapper;
 
 import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.customcontrols.EditorExitable;

@@ -2,7 +2,7 @@ package net.kdt.pojavlaunch.customcontrols;
 
 import androidx.annotation.Keep;
 
-import com.movtery.zalithlauncher.ui.subassembly.customcontrols.ControlInfoData;
+import me.shadow.eclipselaunch.ui.subassembly.customcontrols.ControlInfoData;
 
 import net.kdt.pojavlaunch.Tools;
 

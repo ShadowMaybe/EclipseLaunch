@@ -11,11 +11,11 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.movtery.zalithlauncher.setting.AllSettings;
-import com.movtery.zalithlauncher.setting.AllStaticSettings;
-import com.movtery.zalithlauncher.utils.ZHTools;
-import com.movtery.zalithlauncher.utils.image.Dimension;
-import com.movtery.zalithlauncher.utils.image.ImageUtils;
+import me.shadow.eclipselaunch.setting.AllSettings;
+import me.shadow.eclipselaunch.setting.AllStaticSettings;
+import me.shadow.eclipselaunch.utils.ZHTools;
+import me.shadow.eclipselaunch.utils.image.Dimension;
+import me.shadow.eclipselaunch.utils.image.ImageUtils;
 
 import net.kdt.pojavlaunch.GrabListener;
 

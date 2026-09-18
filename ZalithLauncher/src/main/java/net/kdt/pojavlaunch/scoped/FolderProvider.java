@@ -16,11 +16,11 @@ import android.webkit.MimeTypeMap;
 
 import androidx.annotation.Nullable;
 
-import com.movtery.zalithlauncher.BuildConfig;
-import com.movtery.zalithlauncher.InfoDistributor;
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.utils.path.PathManager;
+import me.shadow.eclipselaunch.BuildConfig;
+import me.shadow.eclipselaunch.InfoDistributor;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.utils.path.PathManager;
 
 import net.kdt.pojavlaunch.Tools;
 

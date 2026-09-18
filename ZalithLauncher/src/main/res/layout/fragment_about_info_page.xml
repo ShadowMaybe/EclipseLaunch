@@ -79,7 +79,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dec2" />
 
-                <com.movtery.zalithlauncher.ui.view.AnimButton
+                <me.shadow.eclipselaunch.ui.view.AnimButton
                     android:id="@+id/qq_group_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

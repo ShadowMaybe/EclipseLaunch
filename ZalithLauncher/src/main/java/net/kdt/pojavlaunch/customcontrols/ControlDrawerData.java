@@ -8,8 +8,8 @@ import static net.kdt.pojavlaunch.customcontrols.ControlDrawerData.Orientation.U
 
 import android.content.Context;
 
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.context.ContextExecutor;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.context.ContextExecutor;
 
 import net.kdt.pojavlaunch.Tools;
 

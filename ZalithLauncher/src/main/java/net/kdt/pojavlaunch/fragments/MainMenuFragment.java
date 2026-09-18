@@ -1,6 +1,6 @@
 package net.kdt.pojavlaunch.fragments;
 
-import static com.movtery.zalithlauncher.event.single.RefreshVersionsEvent.MODE.END;
+import static me.shadow.eclipselaunch.event.single.RefreshVersionsEvent.MODE.END;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,27 +13,27 @@ import androidx.annotation.Nullable;
 
 import com.movtery.anim.AnimPlayer;
 import com.movtery.anim.animations.Animations;
-import com.movtery.zalithlauncher.InfoCenter;
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.databinding.FragmentLauncherBinding;
-import com.movtery.zalithlauncher.event.single.AccountUpdateEvent;
-import com.movtery.zalithlauncher.event.single.LaunchGameEvent;
-import com.movtery.zalithlauncher.event.single.RefreshVersionsEvent;
-import com.movtery.zalithlauncher.feature.version.Version;
-import com.movtery.zalithlauncher.feature.version.utils.VersionIconUtils;
-import com.movtery.zalithlauncher.feature.version.VersionInfo;
-import com.movtery.zalithlauncher.feature.version.VersionsManager;
-import com.movtery.zalithlauncher.task.TaskExecutors;
-import com.movtery.zalithlauncher.ui.fragment.AboutFragment;
-import com.movtery.zalithlauncher.ui.fragment.ControlButtonFragment;
-import com.movtery.zalithlauncher.ui.fragment.FilesFragment;
-import com.movtery.zalithlauncher.ui.fragment.FragmentWithAnim;
-import com.movtery.zalithlauncher.ui.fragment.VersionManagerFragment;
-import com.movtery.zalithlauncher.ui.fragment.VersionsListFragment;
-import com.movtery.zalithlauncher.ui.subassembly.account.AccountViewWrapper;
-import com.movtery.zalithlauncher.utils.path.PathManager;
-import com.movtery.zalithlauncher.utils.ZHTools;
-import com.movtery.zalithlauncher.utils.anim.ViewAnimUtils;
+import me.shadow.eclipselaunch.InfoCenter;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.databinding.FragmentLauncherBinding;
+import me.shadow.eclipselaunch.event.single.AccountUpdateEvent;
+import me.shadow.eclipselaunch.event.single.LaunchGameEvent;
+import me.shadow.eclipselaunch.event.single.RefreshVersionsEvent;
+import me.shadow.eclipselaunch.feature.version.Version;
+import me.shadow.eclipselaunch.feature.version.utils.VersionIconUtils;
+import me.shadow.eclipselaunch.feature.version.VersionInfo;
+import me.shadow.eclipselaunch.feature.version.VersionsManager;
+import me.shadow.eclipselaunch.task.TaskExecutors;
+import me.shadow.eclipselaunch.ui.fragment.AboutFragment;
+import me.shadow.eclipselaunch.ui.fragment.ControlButtonFragment;
+import me.shadow.eclipselaunch.ui.fragment.FilesFragment;
+import me.shadow.eclipselaunch.ui.fragment.FragmentWithAnim;
+import me.shadow.eclipselaunch.ui.fragment.VersionManagerFragment;
+import me.shadow.eclipselaunch.ui.fragment.VersionsListFragment;
+import me.shadow.eclipselaunch.ui.subassembly.account.AccountViewWrapper;
+import me.shadow.eclipselaunch.utils.path.PathManager;
+import me.shadow.eclipselaunch.utils.ZHTools;
+import me.shadow.eclipselaunch.utils.anim.ViewAnimUtils;
 
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;

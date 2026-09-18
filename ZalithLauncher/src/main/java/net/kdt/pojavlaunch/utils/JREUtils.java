@@ -1,6 +1,6 @@
 package net.kdt.pojavlaunch.utils;
 
-import static com.movtery.zalithlauncher.utils.path.PathManager.DIR_NATIVE_LIB;
+import static me.shadow.eclipselaunch.utils.path.PathManager.DIR_NATIVE_LIB;
 import static net.kdt.pojavlaunch.Architecture.ARCH_X86;
 import static net.kdt.pojavlaunch.Architecture.is64BitsDevice;
 import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
@@ -15,24 +15,24 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.movtery.zalithlauncher.InfoDistributor;
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.event.value.JvmExitEvent;
-import com.movtery.zalithlauncher.feature.customprofilepath.ProfilePathHome;
-import com.movtery.zalithlauncher.feature.customprofilepath.ProfilePathManager;
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.feature.version.Version;
-import com.movtery.zalithlauncher.feature.version.VersionInfo;
-import com.movtery.zalithlauncher.plugins.driver.DriverPluginManager;
-import com.movtery.zalithlauncher.plugins.renderer.RendererPluginManager;
-import com.movtery.zalithlauncher.plugins.renderer.RendererPlugin;
-import com.movtery.zalithlauncher.renderer.RendererInterface;
-import com.movtery.zalithlauncher.renderer.Renderers;
-import com.movtery.zalithlauncher.setting.AllSettings;
-import com.movtery.zalithlauncher.ui.activity.ErrorActivity;
-import com.movtery.zalithlauncher.utils.ZHTools;
-import com.movtery.zalithlauncher.utils.path.LibPath;
-import com.movtery.zalithlauncher.utils.path.PathManager;
+import me.shadow.eclipselaunch.InfoDistributor;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.event.value.JvmExitEvent;
+import me.shadow.eclipselaunch.feature.customprofilepath.ProfilePathHome;
+import me.shadow.eclipselaunch.feature.customprofilepath.ProfilePathManager;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.feature.version.Version;
+import me.shadow.eclipselaunch.feature.version.VersionInfo;
+import me.shadow.eclipselaunch.plugins.driver.DriverPluginManager;
+import me.shadow.eclipselaunch.plugins.renderer.RendererPluginManager;
+import me.shadow.eclipselaunch.plugins.renderer.RendererPlugin;
+import me.shadow.eclipselaunch.renderer.RendererInterface;
+import me.shadow.eclipselaunch.renderer.Renderers;
+import me.shadow.eclipselaunch.setting.AllSettings;
+import me.shadow.eclipselaunch.ui.activity.ErrorActivity;
+import me.shadow.eclipselaunch.utils.ZHTools;
+import me.shadow.eclipselaunch.utils.path.LibPath;
+import me.shadow.eclipselaunch.utils.path.PathManager;
 import com.oracle.dalvik.VMLauncher;
 
 import net.kdt.pojavlaunch.Architecture;

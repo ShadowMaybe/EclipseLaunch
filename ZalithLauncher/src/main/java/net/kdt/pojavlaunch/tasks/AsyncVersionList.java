@@ -7,11 +7,11 @@ import androidx.annotation.Nullable;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
-import com.movtery.zalithlauncher.feature.log.Logging;
-import com.movtery.zalithlauncher.task.Task;
-import com.movtery.zalithlauncher.utils.path.PathManager;
-import com.movtery.zalithlauncher.utils.ZHTools;
-import com.movtery.zalithlauncher.utils.path.UrlManager;
+import me.shadow.eclipselaunch.feature.log.Logging;
+import me.shadow.eclipselaunch.task.Task;
+import me.shadow.eclipselaunch.utils.path.PathManager;
+import me.shadow.eclipselaunch.utils.ZHTools;
+import me.shadow.eclipselaunch.utils.path.UrlManager;
 
 import net.kdt.pojavlaunch.JMinecraftVersionList;
 import net.kdt.pojavlaunch.Tools;

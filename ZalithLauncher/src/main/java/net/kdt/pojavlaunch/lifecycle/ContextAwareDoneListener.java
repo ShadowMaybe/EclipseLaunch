@@ -9,14 +9,14 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 
 import com.kdt.mcgui.ProgressLayout;
-import com.movtery.zalithlauncher.R;
-import com.movtery.zalithlauncher.context.ContextExecutor;
-import com.movtery.zalithlauncher.feature.mod.parser.ModChecker;
-import com.movtery.zalithlauncher.feature.mod.parser.ModInfo;
-import com.movtery.zalithlauncher.feature.mod.parser.ModParser;
-import com.movtery.zalithlauncher.feature.mod.parser.ModParserListener;
-import com.movtery.zalithlauncher.feature.version.Version;
-import com.movtery.zalithlauncher.setting.AllSettings;
+import me.shadow.eclipselaunch.R;
+import me.shadow.eclipselaunch.context.ContextExecutor;
+import me.shadow.eclipselaunch.feature.mod.parser.ModChecker;
+import me.shadow.eclipselaunch.feature.mod.parser.ModInfo;
+import me.shadow.eclipselaunch.feature.mod.parser.ModParser;
+import me.shadow.eclipselaunch.feature.mod.parser.ModParserListener;
+import me.shadow.eclipselaunch.feature.version.Version;
+import me.shadow.eclipselaunch.setting.AllSettings;
 
 import net.kdt.pojavlaunch.MainActivity;
 import net.kdt.pojavlaunch.Tools;
