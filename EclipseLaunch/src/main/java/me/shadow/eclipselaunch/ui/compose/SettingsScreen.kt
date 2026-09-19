@@ -1,5 +1,7 @@
 package me.shadow.eclipselaunch.ui.compose
 
+import android.app.AlertDialog
+import android.widget.EditText
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,16 +19,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import me.shadow.eclipselaunch.R
+import me.shadow.eclipselaunch.plugins.driver.DriverPluginManager
+import me.shadow.eclipselaunch.renderer.Renderers
 import me.shadow.eclipselaunch.setting.AllSettings
 import me.shadow.eclipselaunch.utils.CleanUpCache
+import me.shadow.eclipselaunch.utils.ZHTools
+import me.shadow.eclipselaunch.utils.path.UrlManager
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.SmallTitle
 import top.yukonga.miuix.kmp.basic.TabRow
 import top.yukonga.miuix.kmp.preference.ArrowPreference
 import top.yukonga.miuix.kmp.preference.SliderPreference
 import top.yukonga.miuix.kmp.preference.SwitchPreference
-import top.yukonga.miuix.kmp.preference.WindowDropdownPreference
-import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 @Composable
 fun SettingsScreen(
@@ -41,7 +45,6 @@ fun SettingsScreen(
         stringResource(R.string.setting_category_launcher),
         stringResource(R.string.setting_category_experimental)
     )
-
     Column(modifier = Modifier.fillMaxSize()) {
         TabRow(
             tabs = tabs,
@@ -49,7 +52,6 @@ fun SettingsScreen(
             onTabSelected = { selectedTab = it },
             modifier = Modifier.padding(bottom = 4.dp)
         )
-
         when (selectedTab) {
             0 -> VideoSettingsContent()
             1 -> ControlSettingsContent(onNavigateToCustomMouse)
@@ -67,9 +69,47 @@ private fun SettingsScrollContent(content: @Composable () -> Unit) {
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(vertical = 8.dp)
-    ) {
-        content()
+    ) { content() }
+}
+
+/** Show a single-choice list dialog from Compose */
+private fun showListDialog(
+    context: android.content.Context,
+    title: String,
+    entries: Array<String>,
+    entryValues: Array<String>,
+    currentValue: String,
+    onSelect: (String) -> Unit
+) {
+    val index = entryValues.indexOf(currentValue).coerceAtLeast(0)
+    AlertDialog.Builder(context)
+        .setTitle(title)
+        .setSingleChoiceItems(entries, index) { dialog, which ->
+            onSelect(entryValues[which])
+            dialog.dismiss()
+        }
+        .setNegativeButton(android.R.string.cancel, null)
+        .show()
+}
+
+/** Show an EditText dialog from Compose */
+private fun showEditDialog(
+    context: android.content.Context,
+    title: String,
+    currentValue: String,
+    hint: String = "",
+    onConfirm: (String) -> Unit
+) {
+    val et = EditText(context).apply {
+        setText(currentValue)
+        this.hint = hint
     }
+    AlertDialog.Builder(context)
+        .setTitle(title)
+        .setView(et)
+        .setPositiveButton(R.string.generic_confirm) { _, _ -> onConfirm(et.text.toString()) }
+        .setNegativeButton(android.R.string.cancel, null)
+        .show()
 }
 
 // ═══════════════════════════════════════════════════════
@@ -77,33 +117,64 @@ private fun SettingsScrollContent(content: @Composable () -> Unit) {
 // ═══════════════════════════════════════════════════════
 @Composable
 private fun VideoSettingsContent() {
+    val context = LocalContext.current
     SettingsScrollContent {
+        // --- Video category ---
         SmallTitle(text = stringResource(R.string.setting_category_video))
-
         Card(modifier = Modifier.padding(horizontal = 12.dp)) {
             // Renderer
             var renderer by remember { mutableStateOf(AllSettings.renderer.getValue()) }
+            val renderers = remember { Renderers.getCompatibleRenderers(context).first }
             ArrowPreference(
                 title = stringResource(R.string.setting_renderer_title),
                 summary = renderer,
-                onClick = { /* TODO: renderer picker */ }
+                onClick = {
+                    val names = renderers.rendererNames.toTypedArray()
+                    val ids = renderers.rendererIdentifier.toTypedArray()
+                    showListDialog(context, context.getString(R.string.setting_renderer_title),
+                        names, ids, renderer) { selected ->
+                        AllSettings.renderer.put(selected).save()
+                        renderer = selected
+                    }
+                }
             )
-
+            // Renderer Download
+            ArrowPreference(
+                title = stringResource(R.string.setting_category_download),
+                summary = null,
+                onClick = { ZHTools.openLink(context, UrlManager.URL_FCL_RENDERER_PLUGIN) }
+            )
             // Renderer Local Import
             ArrowPreference(
                 title = stringResource(R.string.setting_renderer_local_import_title),
                 summary = stringResource(R.string.setting_renderer_local_import_desc),
-                onClick = { /* TODO: requires ActivityResultLauncher */ }
+                onClick = { /* TODO: requires ActivityResultLauncher for file picker */ }
             )
-
             // Driver
             var driver by remember { mutableStateOf(AllSettings.driver.getValue()) }
+            val driverNames = remember { DriverPluginManager.getDriverNameList().toTypedArray() }
             ArrowPreference(
                 title = stringResource(R.string.setting_driver_title),
                 summary = driver,
-                onClick = { /* TODO: driver picker */ }
+                onClick = {
+                    showListDialog(context, context.getString(R.string.setting_driver_title),
+                        driverNames, driverNames, driver) { selected ->
+                        AllSettings.driver.put(selected).save()
+                        driver = selected
+                    }
+                }
             )
+            // Driver Download
+            ArrowPreference(
+                title = stringResource(R.string.setting_category_download),
+                summary = null,
+                onClick = { ZHTools.openLink(context, UrlManager.URL_FCL_DRIVER_PLUGIN) }
+            )
+        }
 
+        // --- Display ---
+        SmallTitle(text = "Display")
+        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
             // Ignore Notch
             var ignoreNotch by remember { mutableStateOf(AllSettings.ignoreNotch.getValue()) }
             SwitchPreference(
@@ -112,7 +183,6 @@ private fun VideoSettingsContent() {
                 title = stringResource(R.string.setting_ignore_notch_title),
                 summary = stringResource(R.string.setting_ignore_notch_desc)
             )
-
             // Ignore Notch Launcher
             var ignoreNotchLauncher by remember { mutableStateOf(AllSettings.ignoreNotchLauncher.getValue()) }
             SwitchPreference(
@@ -123,7 +193,9 @@ private fun VideoSettingsContent() {
             )
         }
 
-        Card(modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)) {
+        // --- Resolution & Performance ---
+        SmallTitle(text = "Resolution & Performance")
+        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
             // Resolution Ratio (XML: min=25, max=300)
             var resolutionRatio by remember { mutableStateOf(AllSettings.resolutionRatio.getValue().toFloat()) }
             SliderPreference(
@@ -134,9 +206,6 @@ private fun VideoSettingsContent() {
                 summary = "${resolutionRatio.toInt()}%",
                 valueRange = 25f..300f
             )
-        }
-
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
             // Sustained Performance
             var sustainedPerformance by remember { mutableStateOf(AllSettings.sustainedPerformance.getValue()) }
             SwitchPreference(
@@ -145,7 +214,6 @@ private fun VideoSettingsContent() {
                 title = stringResource(R.string.setting_sustained_performance_title),
                 summary = stringResource(R.string.setting_limit_overheating_throttling)
             )
-
             // Alternate Surface
             var alternateSurface by remember { mutableStateOf(AllSettings.alternateSurface.getValue()) }
             SwitchPreference(
@@ -154,7 +222,6 @@ private fun VideoSettingsContent() {
                 title = stringResource(R.string.setting_use_surface_view_title),
                 summary = stringResource(R.string.setting_use_surface_view_desc)
             )
-
             // Force Vsync — only when alternateSurface is on
             if (alternateSurface) {
                 var forceVsync by remember { mutableStateOf(AllSettings.forceVsync.getValue()) }
@@ -165,7 +232,6 @@ private fun VideoSettingsContent() {
                     summary = stringResource(R.string.setting_limit_overheating_throttling)
                 )
             }
-
             // VSync in Zink
             var vsyncInZink by remember { mutableStateOf(AllSettings.vsyncInZink.getValue()) }
             SwitchPreference(
@@ -174,7 +240,6 @@ private fun VideoSettingsContent() {
                 title = stringResource(R.string.setting_vsync_in_zink_title),
                 summary = stringResource(R.string.setting_vsync_in_zink_desc)
             )
-
             // Zink Prefer System Driver
             var zinkPreferSystemDriver by remember { mutableStateOf(AllSettings.zinkPreferSystemDriver.getValue()) }
             SwitchPreference(
@@ -193,12 +258,10 @@ private fun VideoSettingsContent() {
 @Composable
 private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
     val context = LocalContext.current
-
     SettingsScrollContent {
+        // --- Controls ---
         SmallTitle(text = stringResource(R.string.setting_category_control))
-
         Card(modifier = Modifier.padding(horizontal = 12.dp)) {
-            // Disable Gestures
             var disableGestures by remember { mutableStateOf(AllSettings.disableGestures.getValue()) }
             SwitchPreference(
                 checked = disableGestures,
@@ -206,8 +269,6 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
                 title = stringResource(R.string.setting_disable_gestures_title),
                 summary = stringResource(R.string.setting_disable_gestures_desc)
             )
-
-            // Disable Double Tap to Swap
             var disableDoubleTap by remember { mutableStateOf(AllSettings.disableDoubleTap.getValue()) }
             SwitchPreference(
                 checked = disableDoubleTap,
@@ -215,8 +276,6 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
                 title = stringResource(R.string.setting_disable_swap_hand_title),
                 summary = stringResource(R.string.setting_disable_swap_hand_desc)
             )
-
-            // Long Press Trigger (XML: min=100, max=1000)
             if (!disableGestures) {
                 var timeLongPress by remember { mutableStateOf(AllSettings.timeLongPressTrigger.getValue().toFloat()) }
                 SliderPreference(
@@ -230,10 +289,9 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
             }
         }
 
+        // --- Control Layout ---
         SmallTitle(text = stringResource(R.string.pedit_control))
-
         Card(modifier = Modifier.padding(horizontal = 12.dp)) {
-            // Button Scale (XML: min=80, max=250)
             var buttonScale by remember { mutableStateOf(AllSettings.buttonScale.getValue().toFloat()) }
             SliderPreference(
                 value = buttonScale,
@@ -243,8 +301,6 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
                 summary = "${buttonScale.toInt()}%",
                 valueRange = 80f..250f
             )
-
-            // Button All Caps
             var buttonAllCaps by remember { mutableStateOf(AllSettings.buttonAllCaps.getValue()) }
             SwitchPreference(
                 checked = buttonAllCaps,
@@ -254,10 +310,9 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
             )
         }
 
+        // --- Virtual Mouse ---
         SmallTitle(text = stringResource(R.string.setting_category_virtual_mouse))
-
         Card(modifier = Modifier.padding(horizontal = 12.dp)) {
-            // Mouse Scale (XML: min=25, max=300)
             var mouseScale by remember { mutableStateOf(AllSettings.mouseScale.getValue().toFloat()) }
             SliderPreference(
                 value = mouseScale,
@@ -267,8 +322,6 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
                 summary = "${mouseScale.toInt()}%",
                 valueRange = 25f..300f
             )
-
-            // Mouse Speed (XML: min=25, max=300)
             var mouseSpeed by remember { mutableStateOf(AllSettings.mouseSpeed.getValue().toFloat()) }
             SliderPreference(
                 value = mouseSpeed,
@@ -278,8 +331,6 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
                 summary = "${mouseSpeed.toInt()}%",
                 valueRange = 25f..300f
             )
-
-            // Virtual Mouse Start
             var virtualMouseStart by remember { mutableStateOf(AllSettings.virtualMouseStart.getValue()) }
             SwitchPreference(
                 checked = virtualMouseStart,
@@ -287,8 +338,6 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
                 title = stringResource(R.string.setting_mouse_start_title),
                 summary = stringResource(R.string.setting_mouse_start_desc)
             )
-
-            // Custom Mouse
             ArrowPreference(
                 title = stringResource(R.string.custom_mouse_title),
                 summary = stringResource(R.string.custom_mouse_desc),
@@ -296,10 +345,9 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
             )
         }
 
+        // --- Gyro ---
         SmallTitle(text = stringResource(R.string.setting_category_gyro_controls))
-
         Card(modifier = Modifier.padding(horizontal = 12.dp)) {
-            // Enable Gyro
             var enableGyro by remember { mutableStateOf(AllSettings.enableGyro.getValue()) }
             SwitchPreference(
                 checked = enableGyro,
@@ -307,9 +355,7 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
                 title = stringResource(R.string.setting_enable_gyro_title),
                 summary = stringResource(R.string.setting_enable_gyro_desc)
             )
-
             if (enableGyro) {
-                // Gyro Sensitivity (XML: min=25, max=300)
                 var gyroSensitivity by remember { mutableStateOf(AllSettings.gyroSensitivity.getValue().toFloat()) }
                 SliderPreference(
                     value = gyroSensitivity,
@@ -319,8 +365,6 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
                     summary = "${gyroSensitivity.toInt()}%",
                     valueRange = 25f..300f
                 )
-
-                // Gyro Sample Rate (XML: min=5, max=50)
                 var gyroSampleRate by remember { mutableStateOf(AllSettings.gyroSampleRate.getValue().toFloat()) }
                 SliderPreference(
                     value = gyroSampleRate,
@@ -330,8 +374,6 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
                     summary = "${gyroSampleRate.toInt()}ms",
                     valueRange = 5f..50f
                 )
-
-                // Gyro Smoothing
                 var gyroSmoothing by remember { mutableStateOf(AllSettings.gyroSmoothing.getValue()) }
                 SwitchPreference(
                     checked = gyroSmoothing,
@@ -339,8 +381,6 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
                     title = stringResource(R.string.setting_gyro_smoothing_title),
                     summary = stringResource(R.string.setting_gyro_smoothing_desc)
                 )
-
-                // Gyro Invert X
                 var gyroInvertX by remember { mutableStateOf(AllSettings.gyroInvertX.getValue()) }
                 SwitchPreference(
                     checked = gyroInvertX,
@@ -348,8 +388,6 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
                     title = stringResource(R.string.setting_gyro_invert_x_axis),
                     summary = stringResource(R.string.setting_gyro_invert_x_axis_description)
                 )
-
-                // Gyro Invert Y
                 var gyroInvertY by remember { mutableStateOf(AllSettings.gyroInvertY.getValue()) }
                 SwitchPreference(
                     checked = gyroInvertY,
@@ -360,17 +398,14 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
             }
         }
 
+        // --- Controller ---
         SmallTitle(text = stringResource(R.string.setting_category_controller_settings))
-
         Card(modifier = Modifier.padding(horizontal = 12.dp)) {
-            // Remap Controller
             ArrowPreference(
                 title = stringResource(R.string.setting_remap_controller_title),
                 summary = stringResource(R.string.setting_remap_controller_desc),
                 onClick = { /* TODO: navigate to GamepadMapperFragment */ }
             )
-
-            // Reset Controller
             ArrowPreference(
                 title = stringResource(R.string.setting_wipe_controller_title),
                 summary = stringResource(R.string.setting_wipe_controller_desc),
@@ -379,8 +414,6 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
                     Toast.makeText(context, R.string.setting_controller_map_wiped, Toast.LENGTH_SHORT).show()
                 }
             )
-
-            // Deadzone Scale (XML: min=50, max=200)
             var deadZoneScale by remember { mutableStateOf(AllSettings.deadZoneScale.getValue().toFloat()) }
             SliderPreference(
                 value = deadZoneScale,
@@ -400,11 +433,9 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
 @Composable
 private fun GameSettingsContent() {
     val context = LocalContext.current
-
     SettingsScrollContent {
         // --- Version ---
         SmallTitle(text = stringResource(R.string.setting_category_version))
-
         Card(modifier = Modifier.padding(horizontal = 12.dp)) {
             var versionIsolation by remember { mutableStateOf(AllSettings.versionIsolation.getValue()) }
             SwitchPreference(
@@ -413,33 +444,22 @@ private fun GameSettingsContent() {
                 title = stringResource(R.string.setting_version_isolation_title),
                 summary = stringResource(R.string.setting_version_isolation_desc)
             )
-
-            // Version Custom Info (EditText)
             var versionCustomInfo by remember { mutableStateOf(AllSettings.versionCustomInfo.getValue()) }
             ArrowPreference(
                 title = stringResource(R.string.setting_version_custom_info_title),
                 summary = versionCustomInfo.ifEmpty { stringResource(R.string.setting_version_custom_info_desc) },
                 onClick = {
-                    val et = android.widget.EditText(context).apply {
-                        setText(versionCustomInfo)
-                        hint = context.getString(R.string.setting_version_custom_info_desc)
+                    showEditDialog(context, context.getString(R.string.setting_version_custom_info_title),
+                        versionCustomInfo, context.getString(R.string.setting_version_custom_info_desc)) { text ->
+                        AllSettings.versionCustomInfo.put(text).save()
+                        versionCustomInfo = text
                     }
-                    android.app.AlertDialog.Builder(context)
-                        .setTitle(R.string.setting_version_custom_info_title)
-                        .setView(et)
-                        .setPositiveButton(R.string.generic_confirm) { _, _ ->
-                            AllSettings.versionCustomInfo.put(et.text.toString()).save()
-                            versionCustomInfo = et.text.toString()
-                        }
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show()
                 }
             )
         }
 
         // --- Language ---
         SmallTitle(text = stringResource(R.string.setting_category_language))
-
         Card(modifier = Modifier.padding(horizontal = 12.dp)) {
             var autoSetGameLanguage by remember { mutableStateOf(AllSettings.autoSetGameLanguage.getValue()) }
             SwitchPreference(
@@ -448,7 +468,6 @@ private fun GameSettingsContent() {
                 title = stringResource(R.string.setting_set_game_language_title),
                 summary = stringResource(R.string.setting_set_game_language_desc)
             )
-
             var gameLanguageOverridden by remember { mutableStateOf(AllSettings.gameLanguageOverridden.getValue()) }
             SwitchPreference(
                 checked = gameLanguageOverridden,
@@ -456,74 +475,56 @@ private fun GameSettingsContent() {
                 title = stringResource(R.string.setting_set_game_language_overridden_title),
                 summary = stringResource(R.string.setting_set_game_language_overridden_desc)
             )
-
-            // Game Language Picker (WindowDropdownPreference)
-            val langNames = context.resources.getStringArray(R.array.all_game_language).toList()
-            val langValues = context.resources.getStringArray(R.array.all_game_language_value).toList()
             var currentLang by remember { mutableStateOf(AllSettings.setGameLanguage.getValue()) }
-            val langIndex = remember(currentLang) { langValues.indexOf(currentLang).coerceAtLeast(0) }
-            WindowDropdownPreference(
+            val langNames = context.resources.getStringArray(R.array.all_game_language)
+            val langValues = context.resources.getStringArray(R.array.all_game_language_value)
+            ArrowPreference(
                 title = stringResource(R.string.setting_set_game_language_list),
-                items = langNames,
-                selectedIndex = langIndex,
-                onSelectedIndexChange = { idx ->
-                    AllSettings.setGameLanguage.put(langValues[idx]).save()
-                    currentLang = langValues[idx]
+                summary = langNames.getOrElse(langValues.indexOf(currentLang).coerceAtLeast(0)) { currentLang },
+                onClick = {
+                    showListDialog(context, context.getString(R.string.setting_set_game_language_list),
+                        langNames, langValues, currentLang) { selected ->
+                        AllSettings.setGameLanguage.put(selected).save()
+                        currentLang = selected
+                    }
                 }
             )
         }
 
         // --- Java Tweaks ---
         SmallTitle(text = stringResource(R.string.setting_category_java_tweaks))
-
         Card(modifier = Modifier.padding(horizontal = 12.dp)) {
-            // Runtime Manager
             ArrowPreference(
                 title = stringResource(R.string.setting_java_multirt_title),
                 summary = stringResource(R.string.setting_java_multirt_desc),
                 onClick = { /* TODO: MultiRTConfigDialog */ }
             )
-
-            // Runtime Mode Picker
-            val rtNames = context.resources.getStringArray(R.array.select_java_runtime_names).toList()
-            val rtValues = context.resources.getStringArray(R.array.select_java_runtime_values).toList()
             var currentRt by remember { mutableStateOf(AllSettings.selectRuntimeMode.getValue()) }
-            val rtIndex = remember(currentRt) { rtValues.indexOf(currentRt).coerceAtLeast(0) }
-            WindowDropdownPreference(
+            val rtNames = context.resources.getStringArray(R.array.select_java_runtime_names)
+            val rtValues = context.resources.getStringArray(R.array.select_java_runtime_values)
+            ArrowPreference(
                 title = stringResource(R.string.setting_java_select_runtime_title),
-                items = rtNames,
-                selectedIndex = rtIndex,
-                onSelectedIndexChange = { idx ->
-                    AllSettings.selectRuntimeMode.put(rtValues[idx]).save()
-                    currentRt = rtValues[idx]
+                summary = rtNames.getOrElse(rtValues.indexOf(currentRt).coerceAtLeast(0)) { currentRt },
+                onClick = {
+                    showListDialog(context, context.getString(R.string.setting_java_select_runtime_title),
+                        rtNames, rtValues, currentRt) { selected ->
+                        AllSettings.selectRuntimeMode.put(selected).save()
+                        currentRt = selected
+                    }
                 }
             )
-
-            // JVM Args (EditText)
             var javaArgs by remember { mutableStateOf(AllSettings.javaArgs.getValue()) }
             ArrowPreference(
                 title = stringResource(R.string.setting_java_args_title),
                 summary = javaArgs.ifEmpty { stringResource(R.string.setting_java_args_desc) },
                 onClick = {
-                    val et = android.widget.EditText(context).apply {
-                        setText(javaArgs)
-                        hint = context.getString(R.string.setting_java_args_desc)
-                        isSingleLine = false
-                        minLines = 3
+                    showEditDialog(context, context.getString(R.string.setting_java_args_title),
+                        javaArgs, context.getString(R.string.setting_java_args_desc)) { text ->
+                        AllSettings.javaArgs.put(text).save()
+                        javaArgs = text
                     }
-                    android.app.AlertDialog.Builder(context)
-                        .setTitle(R.string.setting_java_args_title)
-                        .setView(et)
-                        .setPositiveButton(R.string.generic_confirm) { _, _ ->
-                            AllSettings.javaArgs.put(et.text.toString()).save()
-                            javaArgs = et.text.toString()
-                        }
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show()
                 }
             )
-
-            // RAM Allocation (min=256, dynamic max)
             var ramAllocation by remember { mutableStateOf(AllSettings.ramAllocation.value.getValue().toFloat()) }
             SliderPreference(
                 value = ramAllocation,
@@ -533,8 +534,6 @@ private fun GameSettingsContent() {
                 summary = "${ramAllocation.toInt()}MB",
                 valueRange = 256f..4096f
             )
-
-            // Java Sandbox
             var javaSandbox by remember { mutableStateOf(AllSettings.javaSandbox.getValue()) }
             SwitchPreference(
                 checked = javaSandbox,
@@ -546,7 +545,6 @@ private fun GameSettingsContent() {
 
         // --- Game Menu ---
         SmallTitle(text = stringResource(R.string.setting_category_game_menu))
-
         Card(modifier = Modifier.padding(horizontal = 12.dp)) {
             var gameMenuShowMemory by remember { mutableStateOf(AllSettings.gameMenuShowMemory.getValue()) }
             SwitchPreference(
@@ -555,7 +553,6 @@ private fun GameSettingsContent() {
                 title = stringResource(R.string.setting_game_menu_show_memory_title),
                 summary = stringResource(R.string.setting_game_menu_show_memory_desc)
             )
-
             var gameMenuShowFPS by remember { mutableStateOf(AllSettings.gameMenuShowFPS.getValue()) }
             SwitchPreference(
                 checked = gameMenuShowFPS,
@@ -563,46 +560,32 @@ private fun GameSettingsContent() {
                 title = stringResource(R.string.setting_game_menu_show_fps_title),
                 summary = stringResource(R.string.setting_game_menu_show_fps_desc)
             )
-
-            // Memory Text Prefix (EditText)
             var gameMenuMemoryText by remember { mutableStateOf(AllSettings.gameMenuMemoryText.getValue()) }
             ArrowPreference(
                 title = stringResource(R.string.setting_game_menu_memory_text_title),
                 summary = gameMenuMemoryText,
                 onClick = {
-                    val et = android.widget.EditText(context).apply {
-                        setText(gameMenuMemoryText)
-                        hint = "M:"
-                        filters = arrayOf(android.text.InputFilter.LengthFilter(40))
+                    showEditDialog(context, context.getString(R.string.setting_game_menu_memory_text_title),
+                        gameMenuMemoryText, "M:") { text ->
+                        AllSettings.gameMenuMemoryText.put(text).save()
+                        gameMenuMemoryText = text
                     }
-                    android.app.AlertDialog.Builder(context)
-                        .setTitle(R.string.setting_game_menu_memory_text_title)
-                        .setView(et)
-                        .setPositiveButton(R.string.generic_confirm) { _, _ ->
-                            AllSettings.gameMenuMemoryText.put(et.text.toString()).save()
-                            gameMenuMemoryText = et.text.toString()
-                        }
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show()
                 }
             )
-
-            // Game Menu Location Picker
-            val locNames = context.resources.getStringArray(R.array.game_menu_location_names).toList()
-            val locValues = context.resources.getStringArray(R.array.game_menu_location_values).toList()
             var currentLoc by remember { mutableStateOf(AllSettings.gameMenuLocation.getValue()) }
-            val locIndex = remember(currentLoc) { locValues.indexOf(currentLoc).coerceAtLeast(0) }
-            WindowDropdownPreference(
+            val locNames = context.resources.getStringArray(R.array.game_menu_location_names)
+            val locValues = context.resources.getStringArray(R.array.game_menu_location_values)
+            ArrowPreference(
                 title = stringResource(R.string.setting_game_menu_location_title),
-                items = locNames,
-                selectedIndex = locIndex,
-                onSelectedIndexChange = { idx ->
-                    AllSettings.gameMenuLocation.put(locValues[idx]).save()
-                    currentLoc = locValues[idx]
+                summary = locNames.getOrElse(locValues.indexOf(currentLoc).coerceAtLeast(0)) { currentLoc },
+                onClick = {
+                    showListDialog(context, context.getString(R.string.setting_game_menu_location_title),
+                        locNames, locValues, currentLoc) { selected ->
+                        AllSettings.gameMenuLocation.put(selected).save()
+                        currentLoc = selected
+                    }
                 }
             )
-
-            // Game Menu Info Refresh Rate (XML: min=500, max=5000)
             var gameMenuInfoRefreshRate by remember { mutableStateOf(AllSettings.gameMenuInfoRefreshRate.getValue().toFloat()) }
             SliderPreference(
                 value = gameMenuInfoRefreshRate,
@@ -612,8 +595,6 @@ private fun GameSettingsContent() {
                 summary = "${gameMenuInfoRefreshRate.toInt()}ms",
                 valueRange = 500f..5000f
             )
-
-            // Game Menu Alpha (XML: min=20, max=100)
             var gameMenuAlpha by remember { mutableStateOf(AllSettings.gameMenuAlpha.getValue().toFloat()) }
             SliderPreference(
                 value = gameMenuAlpha,
@@ -633,11 +614,9 @@ private fun GameSettingsContent() {
 @Composable
 private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {}) {
     val context = LocalContext.current
-
     SettingsScrollContent {
         // --- Download ---
         SmallTitle(text = stringResource(R.string.setting_category_download))
-
         Card(modifier = Modifier.padding(horizontal = 12.dp)) {
             var checkLibraries by remember { mutableStateOf(AllSettings.checkLibraries.getValue()) }
             SwitchPreference(
@@ -646,7 +625,6 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
                 title = stringResource(R.string.setting_check_libraries_title),
                 summary = stringResource(R.string.setting_check_libraries_desc)
             )
-
             var verifyManifest by remember { mutableStateOf(AllSettings.verifyManifest.getValue()) }
             SwitchPreference(
                 checked = verifyManifest,
@@ -654,7 +632,6 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
                 title = stringResource(R.string.setting_verify_manifest_title),
                 summary = stringResource(R.string.setting_verify_manifest_desc)
             )
-
             var resourceImageCache by remember { mutableStateOf(AllSettings.resourceImageCache.getValue()) }
             SwitchPreference(
                 checked = resourceImageCache,
@@ -662,7 +639,6 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
                 title = stringResource(R.string.setting_resource_image_cache_title),
                 summary = stringResource(R.string.setting_resource_image_cache_desc)
             )
-
             var addFullResourceName by remember { mutableStateOf(AllSettings.addFullResourceName.getValue()) }
             SwitchPreference(
                 checked = addFullResourceName,
@@ -671,25 +647,21 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
                 summary = stringResource(R.string.setting_resource_full_name_desc)
             )
         }
-
         Card(modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)) {
-            // Download Source Picker
-            val dsNames = context.resources.getStringArray(R.array.download_source_names).toList()
-            val dsValues = context.resources.getStringArray(R.array.download_source_values).toList()
             var currentDs by remember { mutableStateOf(AllSettings.downloadSource.getValue()) }
-            val dsIndex = remember(currentDs) { dsValues.indexOf(currentDs).coerceAtLeast(0) }
-            WindowDropdownPreference(
+            val dsNames = context.resources.getStringArray(R.array.download_source_names)
+            val dsValues = context.resources.getStringArray(R.array.download_source_values)
+            ArrowPreference(
                 title = stringResource(R.string.setting_download_source_title),
-                summary = stringResource(R.string.setting_download_source_desc),
-                items = dsNames,
-                selectedIndex = dsIndex,
-                onSelectedIndexChange = { idx ->
-                    AllSettings.downloadSource.put(dsValues[idx]).save()
-                    currentDs = dsValues[idx]
+                summary = dsNames.getOrElse(dsValues.indexOf(currentDs).coerceAtLeast(0)) { currentDs },
+                onClick = {
+                    showListDialog(context, context.getString(R.string.setting_download_source_title),
+                        dsNames, dsValues, currentDs) { selected ->
+                        AllSettings.downloadSource.put(selected).save()
+                        currentDs = selected
+                    }
                 }
             )
-
-            // Max Download Threads (XML: min=1, max=128)
             var maxDownloadThreads by remember { mutableStateOf(AllSettings.maxDownloadThreads.getValue().toFloat()) }
             SliderPreference(
                 value = maxDownloadThreads,
@@ -703,31 +675,26 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
 
         // --- Personalization ---
         SmallTitle(text = stringResource(R.string.setting_category_personalization))
-
         Card(modifier = Modifier.padding(horizontal = 12.dp)) {
-            // Launcher Theme Picker
-            val thNames = context.resources.getStringArray(R.array.launcher_theme_names).toList()
-            val thValues = context.resources.getStringArray(R.array.launcher_theme_values).toList()
             var currentTh by remember { mutableStateOf(AllSettings.launcherTheme.getValue()) }
-            val thIndex = remember(currentTh) { thValues.indexOf(currentTh).coerceAtLeast(0) }
-            WindowDropdownPreference(
+            val thNames = context.resources.getStringArray(R.array.launcher_theme_names)
+            val thValues = context.resources.getStringArray(R.array.launcher_theme_values)
+            ArrowPreference(
                 title = stringResource(R.string.setting_launcher_theme),
-                items = thNames,
-                selectedIndex = thIndex,
-                onSelectedIndexChange = { idx ->
-                    AllSettings.launcherTheme.put(thValues[idx]).save()
-                    currentTh = thValues[idx]
+                summary = thNames.getOrElse(thValues.indexOf(currentTh).coerceAtLeast(0)) { currentTh },
+                onClick = {
+                    showListDialog(context, context.getString(R.string.setting_launcher_theme),
+                        thNames, thValues, currentTh) { selected ->
+                        AllSettings.launcherTheme.put(selected).save()
+                        currentTh = selected
+                    }
                 }
             )
-
-            // Custom Background
             ArrowPreference(
                 title = stringResource(R.string.custom_background_title),
                 summary = stringResource(R.string.custom_background_desc),
                 onClick = onNavigateToCustomBackground
             )
-
-            // Animation
             var animation by remember { mutableStateOf(AllSettings.animation.getValue()) }
             SwitchPreference(
                 checked = animation,
@@ -735,8 +702,6 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
                 title = stringResource(R.string.setting_animation_title),
                 summary = stringResource(R.string.setting_animation_desc)
             )
-
-            // Animation Speed (XML: min=300, max=1500)
             var animationSpeed by remember { mutableStateOf(AllSettings.animationSpeed.getValue().toFloat()) }
             SliderPreference(
                 value = animationSpeed,
@@ -746,8 +711,6 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
                 summary = "${animationSpeed.toInt()}ms",
                 valueRange = 300f..1500f
             )
-
-            // Page Opacity (XML: min=50, max=100)
             var pageOpacity by remember { mutableStateOf(AllSettings.pageOpacity.getValue().toFloat()) }
             SliderPreference(
                 value = pageOpacity,
@@ -761,7 +724,6 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
 
         // --- Launcher ---
         SmallTitle(text = stringResource(R.string.setting_category_launcher))
-
         Card(modifier = Modifier.padding(horizontal = 12.dp)) {
             var enableLogOutput by remember { mutableStateOf(AllSettings.enableLogOutput.getValue()) }
             SwitchPreference(
@@ -770,7 +732,6 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
                 title = stringResource(R.string.setting_enable_log_output_title),
                 summary = stringResource(R.string.setting_enable_log_output_desc)
             )
-
             var quitLauncher by remember { mutableStateOf(AllSettings.quitLauncher.getValue()) }
             SwitchPreference(
                 checked = quitLauncher,
@@ -778,43 +739,30 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
                 title = stringResource(R.string.setting_quit_launcher_title),
                 summary = stringResource(R.string.setting_quit_launcher_desc)
             )
-
             ArrowPreference(
                 title = stringResource(R.string.clear_up_cache),
                 summary = stringResource(R.string.clear_up_cache_desc),
                 onClick = { CleanUpCache.start(context) }
             )
-
             ArrowPreference(
                 title = stringResource(R.string.curseforge_api_key_title),
                 summary = stringResource(R.string.curseforge_api_key_desc),
                 onClick = {
-                    val et = android.widget.EditText(context).apply {
-                        setText(AllSettings.curseforgeApiKey.getValue().ifEmpty {
+                    showEditDialog(context, context.getString(R.string.curseforge_api_key_title),
+                        AllSettings.curseforgeApiKey.getValue().ifEmpty {
                             me.shadow.eclipselaunch.InfoDistributor.CURSEFORGE_API_KEY
-                        })
-                        hint = context.getString(R.string.curseforge_api_key_hint)
+                        },
+                        context.getString(R.string.curseforge_api_key_hint)) { text ->
+                        AllSettings.curseforgeApiKey.put(text.trim()).save()
+                        Toast.makeText(context, "CurseForge API key saved", Toast.LENGTH_SHORT).show()
                     }
-                    android.app.AlertDialog.Builder(context)
-                        .setTitle(R.string.curseforge_api_key_title)
-                        .setView(et)
-                        .setPositiveButton(R.string.generic_confirm) { _, _ ->
-                            AllSettings.curseforgeApiKey.put(et.text.toString().trim()).save()
-                            Toast.makeText(context, "CurseForge API key saved", Toast.LENGTH_SHORT).show()
-                        }
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show()
                 }
             )
-
             ArrowPreference(
                 title = stringResource(R.string.update),
                 summary = stringResource(R.string.update_summary),
-                onClick = {
-                    Toast.makeText(context, "Update checking is disabled", Toast.LENGTH_SHORT).show()
-                }
+                onClick = { Toast.makeText(context, "Update checking is disabled", Toast.LENGTH_SHORT).show() }
             )
-
             var notificationPermissionRequest by remember { mutableStateOf(AllSettings.notificationPermissionRequest.getValue()) }
             SwitchPreference(
                 checked = notificationPermissionRequest,
@@ -833,7 +781,6 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
 private fun ExperimentalSettingsContent() {
     SettingsScrollContent {
         SmallTitle(text = stringResource(R.string.setting_category_experimental_patches))
-
         Card(modifier = Modifier.padding(horizontal = 12.dp)) {
             var dumpShaders by remember { mutableStateOf(AllSettings.dumpShaders.getValue()) }
             SwitchPreference(
@@ -842,7 +789,6 @@ private fun ExperimentalSettingsContent() {
                 title = stringResource(R.string.setting_shader_dump_title),
                 summary = stringResource(R.string.setting_shader_dump_desc)
             )
-
             var bigCoreAffinity by remember { mutableStateOf(AllSettings.bigCoreAffinity.getValue()) }
             SwitchPreference(
                 checked = bigCoreAffinity,
@@ -851,11 +797,8 @@ private fun ExperimentalSettingsContent() {
                 summary = stringResource(R.string.setting_force_big_core_desc)
             )
         }
-
         SmallTitle(text = stringResource(R.string.setting_category_support))
-
         Card(modifier = Modifier.padding(horizontal = 12.dp)) {
-            // Touch Controller Vibrate Duration (XML: min=80, max=500)
             var tcVibrateDuration by remember { mutableStateOf(AllSettings.tcVibrateDuration.getValue().toFloat()) }
             SliderPreference(
                 value = tcVibrateDuration,
