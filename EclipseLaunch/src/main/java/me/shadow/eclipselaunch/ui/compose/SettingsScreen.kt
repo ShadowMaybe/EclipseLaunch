@@ -68,7 +68,7 @@ private fun SettingsScrollContent(content: @Composable () -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(vertical = 8.dp)
+            .padding(vertical = 12.dp, horizontal = 12.dp)
     ) { content() }
 }
 
@@ -113,21 +113,21 @@ private fun showEditDialog(
 }
 
 // ═══════════════════════════════════════════════════════
-// VIDEO SETTINGS
+// VIDEO SETTINGS — matches settings_fragment_video.xml
+// ONE card: video_category
 // ═══════════════════════════════════════════════════════
 @Composable
 private fun VideoSettingsContent() {
     val context = LocalContext.current
     SettingsScrollContent {
-        // --- Video category ---
         SmallTitle(text = stringResource(R.string.setting_category_video))
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
+        Card(modifier = Modifier.padding(horizontal = 0.dp)) {
             // Renderer
             var renderer by remember { mutableStateOf(AllSettings.renderer.getValue()) }
             val renderers = remember { Renderers.getCompatibleRenderers(context).first }
             ArrowPreference(
                 title = stringResource(R.string.setting_renderer_title),
-                summary = renderer,
+                summary = renderer.ifEmpty { stringResource(R.string.generic_default) },
                 onClick = {
                     val names = renderers.rendererNames.toTypedArray()
                     val ids = renderers.rendererIdentifier.toTypedArray()
@@ -148,14 +148,14 @@ private fun VideoSettingsContent() {
             ArrowPreference(
                 title = stringResource(R.string.setting_renderer_local_import_title),
                 summary = stringResource(R.string.setting_renderer_local_import_desc),
-                onClick = { /* TODO: requires ActivityResultLauncher for file picker */ }
+                onClick = { /* requires ActivityResultLauncher */ }
             )
             // Driver
             var driver by remember { mutableStateOf(AllSettings.driver.getValue()) }
             val driverNames = remember { DriverPluginManager.getDriverNameList().toTypedArray() }
             ArrowPreference(
                 title = stringResource(R.string.setting_driver_title),
-                summary = driver,
+                summary = driver.ifEmpty { stringResource(R.string.generic_default) },
                 onClick = {
                     showListDialog(context, context.getString(R.string.setting_driver_title),
                         driverNames, driverNames, driver) { selected ->
@@ -170,11 +170,6 @@ private fun VideoSettingsContent() {
                 summary = null,
                 onClick = { ZHTools.openLink(context, UrlManager.URL_FCL_DRIVER_PLUGIN) }
             )
-        }
-
-        // --- Display ---
-        SmallTitle(text = "Display")
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
             // Ignore Notch
             var ignoreNotch by remember { mutableStateOf(AllSettings.ignoreNotch.getValue()) }
             SwitchPreference(
@@ -191,11 +186,6 @@ private fun VideoSettingsContent() {
                 title = stringResource(R.string.setting_launcher_ignore_notch_title),
                 summary = stringResource(R.string.setting_launcher_ignore_notch_desc)
             )
-        }
-
-        // --- Resolution & Performance ---
-        SmallTitle(text = "Resolution & Performance")
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
             // Resolution Ratio (XML: min=25, max=300)
             var resolutionRatio by remember { mutableStateOf(AllSettings.resolutionRatio.getValue().toFloat()) }
             SliderPreference(
@@ -253,15 +243,17 @@ private fun VideoSettingsContent() {
 }
 
 // ═══════════════════════════════════════════════════════
-// CONTROL SETTINGS
+// CONTROL SETTINGS — matches settings_fragment_control.xml
+// Cards: custom_controls_category, controls_category,
+//        mouse_category, enableGyro_category, controller_category
 // ═══════════════════════════════════════════════════════
 @Composable
 private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
     val context = LocalContext.current
     SettingsScrollContent {
-        // --- Controls ---
+        // --- custom_controls_category ---
         SmallTitle(text = stringResource(R.string.setting_category_control))
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
+        Card(modifier = Modifier.padding(horizontal = 0.dp)) {
             var disableGestures by remember { mutableStateOf(AllSettings.disableGestures.getValue()) }
             SwitchPreference(
                 checked = disableGestures,
@@ -276,22 +268,21 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
                 title = stringResource(R.string.setting_disable_swap_hand_title),
                 summary = stringResource(R.string.setting_disable_swap_hand_desc)
             )
-            if (!disableGestures) {
-                var timeLongPress by remember { mutableStateOf(AllSettings.timeLongPressTrigger.getValue().toFloat()) }
-                SliderPreference(
-                    value = timeLongPress,
-                    onValueChange = { timeLongPress = it },
-                    onValueChangeFinished = { AllSettings.timeLongPressTrigger.put(timeLongPress.toInt()).save() },
-                    title = stringResource(R.string.setting_longpress_trigger_title),
-                    summary = "${timeLongPress.toInt()}ms",
-                    valueRange = 100f..1000f
-                )
-            }
+            // Time Long Press Trigger — always visible in XML (slider 100-1000)
+            var timeLongPress by remember { mutableStateOf(AllSettings.timeLongPressTrigger.getValue().toFloat()) }
+            SliderPreference(
+                value = timeLongPress,
+                onValueChange = { timeLongPress = it },
+                onValueChangeFinished = { AllSettings.timeLongPressTrigger.put(timeLongPress.toInt()).save() },
+                title = stringResource(R.string.setting_longpress_trigger_title),
+                summary = "${timeLongPress.toInt()}ms",
+                valueRange = 100f..1000f
+            )
         }
 
-        // --- Control Layout ---
+        // --- controls_category ---
         SmallTitle(text = stringResource(R.string.pedit_control))
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
+        Card(modifier = Modifier.padding(horizontal = 0.dp)) {
             var buttonScale by remember { mutableStateOf(AllSettings.buttonScale.getValue().toFloat()) }
             SliderPreference(
                 value = buttonScale,
@@ -310,9 +301,9 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
             )
         }
 
-        // --- Virtual Mouse ---
+        // --- mouse_category ---
         SmallTitle(text = stringResource(R.string.setting_category_virtual_mouse))
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
+        Card(modifier = Modifier.padding(horizontal = 0.dp)) {
             var mouseScale by remember { mutableStateOf(AllSettings.mouseScale.getValue().toFloat()) }
             SliderPreference(
                 value = mouseScale,
@@ -345,9 +336,9 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
             )
         }
 
-        // --- Gyro ---
+        // --- enableGyro_category ---
         SmallTitle(text = stringResource(R.string.setting_category_gyro_controls))
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
+        Card(modifier = Modifier.padding(horizontal = 0.dp)) {
             var enableGyro by remember { mutableStateOf(AllSettings.enableGyro.getValue()) }
             SwitchPreference(
                 checked = enableGyro,
@@ -355,56 +346,54 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
                 title = stringResource(R.string.setting_enable_gyro_title),
                 summary = stringResource(R.string.setting_enable_gyro_desc)
             )
-            if (enableGyro) {
-                var gyroSensitivity by remember { mutableStateOf(AllSettings.gyroSensitivity.getValue().toFloat()) }
-                SliderPreference(
-                    value = gyroSensitivity,
-                    onValueChange = { gyroSensitivity = it },
-                    onValueChangeFinished = { AllSettings.gyroSensitivity.put(gyroSensitivity.toInt()).save() },
-                    title = stringResource(R.string.setting_gyro_sensitivity_title),
-                    summary = "${gyroSensitivity.toInt()}%",
-                    valueRange = 25f..300f
-                )
-                var gyroSampleRate by remember { mutableStateOf(AllSettings.gyroSampleRate.getValue().toFloat()) }
-                SliderPreference(
-                    value = gyroSampleRate,
-                    onValueChange = { gyroSampleRate = it },
-                    onValueChangeFinished = { AllSettings.gyroSampleRate.put(gyroSampleRate.toInt()).save() },
-                    title = stringResource(R.string.setting_gyro_sample_rate_title),
-                    summary = "${gyroSampleRate.toInt()}ms",
-                    valueRange = 5f..50f
-                )
-                var gyroSmoothing by remember { mutableStateOf(AllSettings.gyroSmoothing.getValue()) }
-                SwitchPreference(
-                    checked = gyroSmoothing,
-                    onCheckedChange = { gyroSmoothing = it; AllSettings.gyroSmoothing.put(it).save() },
-                    title = stringResource(R.string.setting_gyro_smoothing_title),
-                    summary = stringResource(R.string.setting_gyro_smoothing_desc)
-                )
-                var gyroInvertX by remember { mutableStateOf(AllSettings.gyroInvertX.getValue()) }
-                SwitchPreference(
-                    checked = gyroInvertX,
-                    onCheckedChange = { gyroInvertX = it; AllSettings.gyroInvertX.put(it).save() },
-                    title = stringResource(R.string.setting_gyro_invert_x_axis),
-                    summary = stringResource(R.string.setting_gyro_invert_x_axis_description)
-                )
-                var gyroInvertY by remember { mutableStateOf(AllSettings.gyroInvertY.getValue()) }
-                SwitchPreference(
-                    checked = gyroInvertY,
-                    onCheckedChange = { gyroInvertY = it; AllSettings.gyroInvertY.put(it).save() },
-                    title = stringResource(R.string.setting_gyro_invert_y_axis),
-                    summary = stringResource(R.string.setting_gyro_invert_y_axis_description)
-                )
-            }
+            var gyroSensitivity by remember { mutableStateOf(AllSettings.gyroSensitivity.getValue().toFloat()) }
+            SliderPreference(
+                value = gyroSensitivity,
+                onValueChange = { gyroSensitivity = it },
+                onValueChangeFinished = { AllSettings.gyroSensitivity.put(gyroSensitivity.toInt()).save() },
+                title = stringResource(R.string.setting_gyro_sensitivity_title),
+                summary = "${gyroSensitivity.toInt()}%",
+                valueRange = 25f..300f
+            )
+            var gyroSampleRate by remember { mutableStateOf(AllSettings.gyroSampleRate.getValue().toFloat()) }
+            SliderPreference(
+                value = gyroSampleRate,
+                onValueChange = { gyroSampleRate = it },
+                onValueChangeFinished = { AllSettings.gyroSampleRate.put(gyroSampleRate.toInt()).save() },
+                title = stringResource(R.string.setting_gyro_sample_rate_title),
+                summary = "${gyroSampleRate.toInt()}ms",
+                valueRange = 5f..50f
+            )
+            var gyroSmoothing by remember { mutableStateOf(AllSettings.gyroSmoothing.getValue()) }
+            SwitchPreference(
+                checked = gyroSmoothing,
+                onCheckedChange = { gyroSmoothing = it; AllSettings.gyroSmoothing.put(it).save() },
+                title = stringResource(R.string.setting_gyro_smoothing_title),
+                summary = stringResource(R.string.setting_gyro_smoothing_desc)
+            )
+            var gyroInvertX by remember { mutableStateOf(AllSettings.gyroInvertX.getValue()) }
+            SwitchPreference(
+                checked = gyroInvertX,
+                onCheckedChange = { gyroInvertX = it; AllSettings.gyroInvertX.put(it).save() },
+                title = stringResource(R.string.setting_gyro_invert_x_axis),
+                summary = stringResource(R.string.setting_gyro_invert_x_axis_description)
+            )
+            var gyroInvertY by remember { mutableStateOf(AllSettings.gyroInvertY.getValue()) }
+            SwitchPreference(
+                checked = gyroInvertY,
+                onCheckedChange = { gyroInvertY = it; AllSettings.gyroInvertY.put(it).save() },
+                title = stringResource(R.string.setting_gyro_invert_y_axis),
+                summary = stringResource(R.string.setting_gyro_invert_y_axis_description)
+            )
         }
 
-        // --- Controller ---
+        // --- controller_category ---
         SmallTitle(text = stringResource(R.string.setting_category_controller_settings))
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
+        Card(modifier = Modifier.padding(horizontal = 0.dp)) {
             ArrowPreference(
                 title = stringResource(R.string.setting_remap_controller_title),
                 summary = stringResource(R.string.setting_remap_controller_desc),
-                onClick = { /* TODO: navigate to GamepadMapperFragment */ }
+                onClick = { /* navigate to GamepadMapperFragment */ }
             )
             ArrowPreference(
                 title = stringResource(R.string.setting_wipe_controller_title),
@@ -428,15 +417,17 @@ private fun ControlSettingsContent(onNavigateToCustomMouse: () -> Unit = {}) {
 }
 
 // ═══════════════════════════════════════════════════════
-// GAME SETTINGS
+// GAME SETTINGS — matches settings_fragment_game.xml
+// Cards: version_category, language_category,
+//        java_category, game_menu_category
 // ═══════════════════════════════════════════════════════
 @Composable
 private fun GameSettingsContent() {
     val context = LocalContext.current
     SettingsScrollContent {
-        // --- Version ---
+        // --- version_category ---
         SmallTitle(text = stringResource(R.string.setting_category_version))
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
+        Card(modifier = Modifier.padding(horizontal = 0.dp)) {
             var versionIsolation by remember { mutableStateOf(AllSettings.versionIsolation.getValue()) }
             SwitchPreference(
                 checked = versionIsolation,
@@ -458,9 +449,9 @@ private fun GameSettingsContent() {
             )
         }
 
-        // --- Language ---
+        // --- language_category ---
         SmallTitle(text = stringResource(R.string.setting_category_language))
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
+        Card(modifier = Modifier.padding(horizontal = 0.dp)) {
             var autoSetGameLanguage by remember { mutableStateOf(AllSettings.autoSetGameLanguage.getValue()) }
             SwitchPreference(
                 checked = autoSetGameLanguage,
@@ -491,13 +482,13 @@ private fun GameSettingsContent() {
             )
         }
 
-        // --- Java Tweaks ---
+        // --- java_category ---
         SmallTitle(text = stringResource(R.string.setting_category_java_tweaks))
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
+        Card(modifier = Modifier.padding(horizontal = 0.dp)) {
             ArrowPreference(
                 title = stringResource(R.string.setting_java_multirt_title),
                 summary = stringResource(R.string.setting_java_multirt_desc),
-                onClick = { /* TODO: MultiRTConfigDialog */ }
+                onClick = { /* MultiRTConfigDialog */ }
             )
             var currentRt by remember { mutableStateOf(AllSettings.selectRuntimeMode.getValue()) }
             val rtNames = context.resources.getStringArray(R.array.select_java_runtime_names)
@@ -525,6 +516,7 @@ private fun GameSettingsContent() {
                     }
                 }
             )
+            // RAM Allocation — XML: min=256, no max (goes to device capacity)
             var ramAllocation by remember { mutableStateOf(AllSettings.ramAllocation.value.getValue().toFloat()) }
             SliderPreference(
                 value = ramAllocation,
@@ -543,9 +535,9 @@ private fun GameSettingsContent() {
             )
         }
 
-        // --- Game Menu ---
+        // --- game_menu_category ---
         SmallTitle(text = stringResource(R.string.setting_category_game_menu))
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
+        Card(modifier = Modifier.padding(horizontal = 0.dp)) {
             var gameMenuShowMemory by remember { mutableStateOf(AllSettings.gameMenuShowMemory.getValue()) }
             SwitchPreference(
                 checked = gameMenuShowMemory,
@@ -586,6 +578,7 @@ private fun GameSettingsContent() {
                     }
                 }
             )
+            // Game Menu Info Refresh Rate (XML: min=500, max=5000)
             var gameMenuInfoRefreshRate by remember { mutableStateOf(AllSettings.gameMenuInfoRefreshRate.getValue().toFloat()) }
             SliderPreference(
                 value = gameMenuInfoRefreshRate,
@@ -595,6 +588,7 @@ private fun GameSettingsContent() {
                 summary = "${gameMenuInfoRefreshRate.toInt()}ms",
                 valueRange = 500f..5000f
             )
+            // Game Menu Alpha (XML: min=20, max=100)
             var gameMenuAlpha by remember { mutableStateOf(AllSettings.gameMenuAlpha.getValue().toFloat()) }
             SliderPreference(
                 value = gameMenuAlpha,
@@ -609,15 +603,16 @@ private fun GameSettingsContent() {
 }
 
 // ═══════════════════════════════════════════════════════
-// LAUNCHER SETTINGS
+// LAUNCHER SETTINGS — matches settings_fragment_launcher.xml
+// Cards: download_category, personalization_category, launcher_category
 // ═══════════════════════════════════════════════════════
 @Composable
 private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {}) {
     val context = LocalContext.current
     SettingsScrollContent {
-        // --- Download ---
+        // --- download_category (all download settings in ONE card) ---
         SmallTitle(text = stringResource(R.string.setting_category_download))
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
+        Card(modifier = Modifier.padding(horizontal = 0.dp)) {
             var checkLibraries by remember { mutableStateOf(AllSettings.checkLibraries.getValue()) }
             SwitchPreference(
                 checked = checkLibraries,
@@ -646,8 +641,7 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
                 title = stringResource(R.string.setting_resource_full_name_title),
                 summary = stringResource(R.string.setting_resource_full_name_desc)
             )
-        }
-        Card(modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)) {
+            // Download Source
             var currentDs by remember { mutableStateOf(AllSettings.downloadSource.getValue()) }
             val dsNames = context.resources.getStringArray(R.array.download_source_names)
             val dsValues = context.resources.getStringArray(R.array.download_source_values)
@@ -662,6 +656,7 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
                     }
                 }
             )
+            // Max Download Threads (XML: min=1, max=128)
             var maxDownloadThreads by remember { mutableStateOf(AllSettings.maxDownloadThreads.getValue().toFloat()) }
             SliderPreference(
                 value = maxDownloadThreads,
@@ -673,9 +668,9 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
             )
         }
 
-        // --- Personalization ---
+        // --- personalization_category ---
         SmallTitle(text = stringResource(R.string.setting_category_personalization))
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
+        Card(modifier = Modifier.padding(horizontal = 0.dp)) {
             var currentTh by remember { mutableStateOf(AllSettings.launcherTheme.getValue()) }
             val thNames = context.resources.getStringArray(R.array.launcher_theme_names)
             val thValues = context.resources.getStringArray(R.array.launcher_theme_values)
@@ -702,6 +697,7 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
                 title = stringResource(R.string.setting_animation_title),
                 summary = stringResource(R.string.setting_animation_desc)
             )
+            // Animation Speed (XML: min=300, max=1500)
             var animationSpeed by remember { mutableStateOf(AllSettings.animationSpeed.getValue().toFloat()) }
             SliderPreference(
                 value = animationSpeed,
@@ -711,6 +707,7 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
                 summary = "${animationSpeed.toInt()}ms",
                 valueRange = 300f..1500f
             )
+            // Page Opacity (XML: min=50, max=100)
             var pageOpacity by remember { mutableStateOf(AllSettings.pageOpacity.getValue().toFloat()) }
             SliderPreference(
                 value = pageOpacity,
@@ -722,9 +719,9 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
             )
         }
 
-        // --- Launcher ---
+        // --- launcher_category ---
         SmallTitle(text = stringResource(R.string.setting_category_launcher))
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
+        Card(modifier = Modifier.padding(horizontal = 0.dp)) {
             var enableLogOutput by remember { mutableStateOf(AllSettings.enableLogOutput.getValue()) }
             SwitchPreference(
                 checked = enableLogOutput,
@@ -775,13 +772,15 @@ private fun LauncherSettingsContent(onNavigateToCustomBackground: () -> Unit = {
 }
 
 // ═══════════════════════════════════════════════════════
-// EXPERIMENTAL SETTINGS
+// EXPERIMENTAL SETTINGS — matches settings_fragment_experimental.xml
+// Cards: experimental_category, support_category
 // ═══════════════════════════════════════════════════════
 @Composable
 private fun ExperimentalSettingsContent() {
     SettingsScrollContent {
+        // --- experimental_category ---
         SmallTitle(text = stringResource(R.string.setting_category_experimental_patches))
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
+        Card(modifier = Modifier.padding(horizontal = 0.dp)) {
             var dumpShaders by remember { mutableStateOf(AllSettings.dumpShaders.getValue()) }
             SwitchPreference(
                 checked = dumpShaders,
@@ -797,8 +796,10 @@ private fun ExperimentalSettingsContent() {
                 summary = stringResource(R.string.setting_force_big_core_desc)
             )
         }
+        // --- support_category ---
         SmallTitle(text = stringResource(R.string.setting_category_support))
-        Card(modifier = Modifier.padding(horizontal = 12.dp)) {
+        Card(modifier = Modifier.padding(horizontal = 0.dp)) {
+            // Touch Controller Vibrate Duration (XML: min=80, max=500)
             var tcVibrateDuration by remember { mutableStateOf(AllSettings.tcVibrateDuration.getValue().toFloat()) }
             SliderPreference(
                 value = tcVibrateDuration,
