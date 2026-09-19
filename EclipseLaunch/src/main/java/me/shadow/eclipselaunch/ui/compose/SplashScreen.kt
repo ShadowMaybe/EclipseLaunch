@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,7 +61,7 @@ fun SplashScreen(
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            items(items) { item ->
+            itemsIndexed(items, key = { index, item -> item.name ?: index.toString() }) { _, item ->
                 InstallableItemRow(item = item)
             }
         }
@@ -89,7 +89,7 @@ fun SplashScreen(
 private fun InstallableItemRow(item: InstallableItem) {
     BasicComponent(
         modifier = Modifier.fillMaxWidth(),
-        title = item.name,
+        title = item.name ?: "",
         summary = item.summary,
         endActions = {
             when {

@@ -45,7 +45,26 @@ class SplashActivity : BaseActivity() {
         installText = getString(R.string.splash_screen_installing)
         startText = getString(R.string.splash_screen_apply)
 
-        renderContent()
+        setContent {
+            EclipseMiuixTheme {
+                // Read recomposeCounter to trigger recomposition
+                @Suppress("UNUSED_EXPRESSION")
+                recomposeCounter.intValue
+
+                SplashScreen(
+                    title = InfoDistributor.APP_NAME,
+                    statusText = if (isStarted) installText else startText,
+                    items = items,
+                    startEnabled = !isStarted,
+                    onStartClick = {
+                        if (isStarted) return@SplashScreen
+                        isStarted = true
+                        recomposeCounter.intValue++ // trigger recomposition to disable button
+                        startAllTasks()
+                    }
+                )
+            }
+        }
 
         if (!Tools.checkStorageRoot()) {
             startActivity(Intent(this, MissingStorageActivity::class.java))
@@ -63,29 +82,6 @@ class SplashActivity : BaseActivity() {
                 .showDialog()
         } else {
             checkEnd()
-        }
-    }
-
-    private fun renderContent() {
-        setContent {
-            EclipseMiuixTheme {
-                // Read recomposeCounter to trigger recomposition
-                @Suppress("UNUSED_EXPRESSION")
-                recomposeCounter.intValue
-
-                SplashScreen(
-                    title = InfoDistributor.APP_NAME,
-                    statusText = if (isStarted) installText else startText,
-                    items = items.toList(),
-                    startEnabled = !isStarted,
-                    onStartClick = {
-                        if (isStarted) return@SplashScreen
-                        isStarted = true
-                        startAllTasks()
-                        renderContent()
-                    }
-                )
-            }
         }
     }
 
