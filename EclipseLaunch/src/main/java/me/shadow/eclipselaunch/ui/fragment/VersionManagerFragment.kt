@@ -4,135 +4,132 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.movtery.anim.AnimPlayer
 import com.movtery.anim.animations.Animations
 import me.shadow.eclipselaunch.R
-import me.shadow.eclipselaunch.databinding.FragmentVersionManagerBinding
 import me.shadow.eclipselaunch.feature.version.NoVersionException
 import me.shadow.eclipselaunch.feature.version.Version
 import me.shadow.eclipselaunch.feature.version.VersionsManager
 import me.shadow.eclipselaunch.task.Task
 import me.shadow.eclipselaunch.task.TaskExecutors
+import me.shadow.eclipselaunch.ui.compose.EclipseMiuixTheme
+import me.shadow.eclipselaunch.ui.compose.VersionManagerScreen
 import me.shadow.eclipselaunch.ui.dialog.TipDialog
 import me.shadow.eclipselaunch.utils.ZHTools
 import me.shadow.eclipselaunch.utils.file.FileDeletionHandler
 import net.kdt.pojavlaunch.Tools
 import java.io.File
 
-class VersionManagerFragment : FragmentWithAnim(R.layout.fragment_version_manager), View.OnClickListener {
+class VersionManagerFragment : FragmentWithAnim() {
     companion object {
         const val TAG: String = "VersionManagerFragment"
     }
 
-    private lateinit var binding: FragmentVersionManagerBinding
+    private var composeView: ComposeView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentVersionManagerBinding.inflate(layoutInflater)
-        return binding.root
+        composeView = ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                EclipseMiuixTheme {
+                    VersionManagerScreen(
+                        onModsClick = { openMods() },
+                        onGamePathClick = { openPath { it } },
+                        onResourcePathClick = { openPath { File(it, "/resourcepacks") } },
+                        onWorldPathClick = { openPath { File(it, "/saves") } },
+                        onShaderPathClick = { openPath { File(it, "/shaderpacks") } },
+                        onScreenshotPathClick = { openPath { File(it, "/screenshots") } },
+                        onLogsPathClick = { openPath { File(it, "/logs") } },
+                        onCrashReportPathClick = { openPath { File(it, "/crash-reports") } },
+                        onVersionSettingsClick = { openVersionSettings() },
+                        onVersionRenameClick = { renameVersion() },
+                        onVersionCopyClick = { copyVersion() },
+                        onVersionDeleteClick = { deleteVersion() }
+                    )
+                }
+            }
+        }
+        return composeView!!
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val fragment = this
-        binding.apply {
-            shortcutsMods.setOnClickListener(fragment)
-            gamePath.setOnClickListener(fragment)
-            resourcePath.setOnClickListener(fragment)
-            worldPath.setOnClickListener(fragment)
-            shaderPath.setOnClickListener(fragment)
-            screenshotPath.setOnClickListener(fragment)
-            logsPath.setOnClickListener(fragment)
-            crashReportPath.setOnClickListener(fragment)
-            versionSettings.setOnClickListener(fragment)
-            versionRename.setOnClickListener(fragment)
-            versionCopy.setOnClickListener(fragment)
-            versionDelete.setOnClickListener(fragment)
+    private fun getVersion(): Version? {
+        val activity = requireActivity()
+        return VersionsManager.getCurrentVersion() ?: run {
+            Tools.showError(activity, getString(R.string.version_manager_no_installed_version), NoVersionException("There is no installed version"))
+            null
         }
     }
 
-    private fun File.mustExists(): File {
-        if (!exists()) {
-            mkdirs()
-        }
-        return this
-    }
-
-    private fun swapFilesFragment(lockPath: File, listPath: File) {
+    private fun openMods() {
+        val version = getVersion() ?: return
         val bundle = Bundle()
-        bundle.putString(FilesFragment.BUNDLE_LOCK_PATH, lockPath.mustExists().absolutePath)
-        bundle.putString(FilesFragment.BUNDLE_LIST_PATH, listPath.mustExists().absolutePath)
-        bundle.putBoolean(FilesFragment.BUNDLE_QUICK_ACCESS_PATHS, false)
+        bundle.putString(ModsFragment.BUNDLE_ROOT_PATH, File(version.getGameDir(), "/mods").apply { mkdirs() }.absolutePath)
+        ZHTools.swapFragmentWithAnim(this, ModsFragment::class.java, ModsFragment.TAG, bundle)
+    }
 
+    private fun openPath(transform: (File) -> File) {
+        val version = getVersion() ?: return
+        val dir = transform(File(version.getGameDir())).apply { mkdirs() }
+        val bundle = Bundle()
+        bundle.putString(FilesFragment.BUNDLE_LOCK_PATH, dir.absolutePath)
+        bundle.putString(FilesFragment.BUNDLE_LIST_PATH, dir.absolutePath)
+        bundle.putBoolean(FilesFragment.BUNDLE_QUICK_ACCESS_PATHS, false)
         ZHTools.swapFragmentWithAnim(this, FilesFragment::class.java, FilesFragment.TAG, bundle)
     }
 
-    override fun onClick(v: View) {
-        val activity = requireActivity()
-        val version: Version = VersionsManager.getCurrentVersion() ?: run {
-            Tools.showError(activity, getString(R.string.version_manager_no_installed_version), NoVersionException("There is no installed version"))
-            return
-        }
-        val gameDirPath = version.getGameDir()
+    private fun openVersionSettings() {
+        ZHTools.swapFragmentWithAnim(this, VersionConfigFragment::class.java, VersionConfigFragment.TAG, null)
+    }
 
-        binding.apply {
-            when (v) {
-                shortcutsMods -> {
-                    val bundle = Bundle()
-                    bundle.putString(ModsFragment.BUNDLE_ROOT_PATH, File(gameDirPath, "/mods").mustExists().absolutePath)
-                    ZHTools.swapFragmentWithAnim(this@VersionManagerFragment, ModsFragment::class.java, ModsFragment.TAG, bundle)
-                }
-                gamePath -> swapFilesFragment(gameDirPath, gameDirPath)
-                resourcePath -> swapFilesFragment(gameDirPath, File(gameDirPath, "/resourcepacks"))
-                worldPath -> swapFilesFragment(gameDirPath, File(gameDirPath, "/saves"))
-                shaderPath -> swapFilesFragment(gameDirPath, File(gameDirPath, "/shaderpacks"))
-                screenshotPath -> swapFilesFragment(gameDirPath, File(gameDirPath, "/screenshots"))
-                logsPath -> swapFilesFragment(gameDirPath, File(gameDirPath, "/logs"))
-                crashReportPath -> swapFilesFragment(gameDirPath, File(gameDirPath, "/crash-reports"))
-
-                versionSettings -> ZHTools.swapFragmentWithAnim(this@VersionManagerFragment, VersionConfigFragment::class.java, VersionConfigFragment.TAG, null)
-                versionRename -> {
-                    VersionsManager.openRenameDialog(activity, version) {
-                        Tools.backToMainMenu(activity) //重命名前，为了不出现问题，需要退出当前Fragment
-                    }
-                }
-                versionCopy -> VersionsManager.openCopyDialog(activity, version)
-                versionDelete -> {
-                    TipDialog.Builder(activity)
-                        .setTitle(R.string.generic_warning)
-                        .setMessage(activity.getString(R.string.version_manager_delete_tip, version.getVersionName()))
-                        .setWarning()
-                        .setConfirmClickListener {
-                            FileDeletionHandler(
-                                activity,
-                                listOf(version.getVersionPath()),
-                                Task.runTask {
-                                    VersionsManager.refresh("VersionManagerFragment:versionDelete")
-                                }.ended(TaskExecutors.getAndroidUI()) {
-                                    Tools.backToMainMenu(activity)
-                                }
-                            ).start()
-                        }
-                        .showDialog()
-                }
-                else -> {}
-            }
+    private fun renameVersion() {
+        val version = getVersion() ?: return
+        VersionsManager.openRenameDialog(requireActivity(), version) {
+            Tools.backToMainMenu(requireActivity())
         }
     }
 
+    private fun copyVersion() {
+        val version = getVersion() ?: return
+        VersionsManager.openCopyDialog(requireActivity(), version)
+    }
+
+    private fun deleteVersion() {
+        val activity = requireActivity()
+        val version = getVersion() ?: return
+        TipDialog.Builder(activity)
+            .setTitle(R.string.generic_warning)
+            .setMessage(activity.getString(R.string.version_manager_delete_tip, version.getVersionName()))
+            .setWarning()
+            .setConfirmClickListener {
+                FileDeletionHandler(
+                    activity,
+                    listOf(version.getVersionPath()),
+                    Task.runTask {
+                        VersionsManager.refresh("VersionManagerFragment:versionDelete")
+                    }.ended(TaskExecutors.getAndroidUI()) {
+                        Tools.backToMainMenu(activity)
+                    }
+                ).start()
+            }
+            .showDialog()
+    }
+
     override fun slideIn(animPlayer: AnimPlayer) {
-        binding.apply {
-            animPlayer.apply(AnimPlayer.Entry(shortcutsLayout, Animations.BounceInRight))
-                .apply(AnimPlayer.Entry(editLayout, Animations.BounceInLeft))
+        composeView?.let {
+            animPlayer.apply(AnimPlayer.Entry(it, Animations.BounceInRight))
         }
     }
 
     override fun slideOut(animPlayer: AnimPlayer) {
-        binding.apply {
-            animPlayer.apply(AnimPlayer.Entry(shortcutsLayout, Animations.FadeOutLeft))
-                .apply(AnimPlayer.Entry(editLayout, Animations.FadeOutRight))
+        composeView?.let {
+            animPlayer.apply(AnimPlayer.Entry(it, Animations.FadeOutLeft))
         }
     }
 }
