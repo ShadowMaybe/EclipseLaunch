@@ -1,6 +1,6 @@
 package net.kdt.pojavlaunch;
 
-import dalvik.annotation.optimization.CriticalNative;
+import me.shadow.eclipselaunch.compat.annotation.CriticalNative;
 
 public class CriticalNativeTest {
     @CriticalNative

@@ -13,7 +13,7 @@ import net.kdt.pojavlaunch.MainActivity;
 
 import java.util.ArrayList;
 
-import dalvik.annotation.optimization.CriticalNative;
+import me.shadow.eclipselaunch.compat.annotation.CriticalNative;
 
 public class CallbackBridge {
     public static final Choreographer sChoreographer = Choreographer.getInstance();
