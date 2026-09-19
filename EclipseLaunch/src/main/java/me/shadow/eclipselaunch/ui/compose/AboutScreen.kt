@@ -102,11 +102,11 @@ private fun AboutInfoCard(context: Context) {
             // Title image
             Image(
                 painter = painterResource(R.drawable.app_name_title),
-                contentDescription = InfoCenter.replaceName(context, R.string.app_name),
+                contentDescription = "Eclipse Launcher",
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),
-                contentScale = ContentScale.FitCenter
+                contentScale = ContentScale.Fit
             )
 
             Spacer(modifier = Modifier.height(16.dp))
