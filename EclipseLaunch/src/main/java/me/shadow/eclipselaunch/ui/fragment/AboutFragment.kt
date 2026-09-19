@@ -14,7 +14,7 @@ import me.shadow.eclipselaunch.ui.compose.ContributorItem
 import me.shadow.eclipselaunch.utils.ZHTools
 import me.shadow.eclipselaunch.utils.path.UrlManager
 
-class AboutFragment : FragmentWithAnim(R.layout.fragment_about) {
+class AboutFragment : FragmentWithAnim() {
     companion object {
         const val TAG: String = "AboutFragment"
     }
@@ -26,61 +26,56 @@ class AboutFragment : FragmentWithAnim(R.layout.fragment_about) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Use the existing layout for the container, but we'll replace content via ComposeView
-        val view = inflater.inflate(R.layout.fragment_about, container, false)
-
-        // Replace the ViewPager2 with a ComposeView
-        val viewPager = view.findViewById<androidx.viewpager2.widget.ViewPager2>(R.id.info_view_pager)
-        val parent = viewPager.parent as? ViewGroup
         composeView = ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 me.shadow.eclipselaunch.ui.compose.EclipseMiuixTheme {
+                    val ctx = requireContext()
                     val contributors = listOf(
                         ContributorItem(
-                            requireContext().resources.getDrawable(R.drawable.ic_pojav_full, requireContext().theme),
+                            ctx.resources.getDrawable(R.drawable.ic_pojav_full, ctx.theme),
                             "PojavLauncherTeam",
                             getString(R.string.about_PojavLauncher_desc),
                             "Github",
                             "https://github.com/PojavLauncherTeam/PojavLauncher"
                         ),
                         ContributorItem(
-                            requireContext().resources.getDrawable(R.drawable.image_about_movtery, requireContext().theme),
+                            ctx.resources.getDrawable(R.drawable.image_about_movtery, ctx.theme),
                             "\u58a8\u5317MovTery",
                             getString(R.string.about_MovTery_desc),
                             getString(R.string.about_access_space),
                             "https://space.bilibili.com/2008204513"
                         ),
                         ContributorItem(
-                            requireContext().resources.getDrawable(R.drawable.image_about_mcmod, requireContext().theme),
+                            ctx.resources.getDrawable(R.drawable.image_about_mcmod, ctx.theme),
                             "MC \u767e\u79d1",
                             getString(R.string.about_mcmod_desc),
                             getString(R.string.about_access_link),
                             UrlManager.URL_MCMOD
                         ),
                         ContributorItem(
-                            requireContext().resources.getDrawable(R.drawable.image_about_verafirefly, requireContext().theme),
+                            ctx.resources.getDrawable(R.drawable.image_about_verafirefly, ctx.theme),
                             "Vera-Firefly",
                             getString(R.string.about_VeraFirefly_desc),
                             getString(R.string.about_access_space),
                             "https://space.bilibili.com/1412062866"
                         ),
                         ContributorItem(
-                            requireContext().resources.getDrawable(R.drawable.image_about_lingmuqiuzhu, requireContext().theme),
+                            ctx.resources.getDrawable(R.drawable.image_about_lingmuqiuzhu, ctx.theme),
                             "\u60c9\u6728\u6e3c\u7af9",
                             getString(R.string.about_LingMuQiuZhu_desc),
                             getString(R.string.about_access_space),
                             "https://space.bilibili.com/515165764"
                         ),
                         ContributorItem(
-                            requireContext().resources.getDrawable(R.drawable.image_about_shirosakimio, requireContext().theme),
+                            ctx.resources.getDrawable(R.drawable.image_about_shirosakimio, ctx.theme),
                             "ShirosakiMio",
                             getString(R.string.about_ShirosakiMio_desc),
                             getString(R.string.about_access_space),
                             "https://space.bilibili.com/35801833"
                         ),
                         ContributorItem(
-                            requireContext().resources.getDrawable(R.drawable.image_about_bangbang93, requireContext().theme),
+                            ctx.resources.getDrawable(R.drawable.image_about_bangbang93, ctx.theme),
                             "bangbang93",
                             getString(R.string.about_bangbang93_desc),
                             getString(R.string.about_button_support_development),
@@ -99,20 +94,12 @@ class AboutFragment : FragmentWithAnim(R.layout.fragment_about) {
                     )
                 }
             }
-            layoutParams = viewPager.layoutParams
         }
-
-        parent?.let {
-            val index = it.indexOfChild(viewPager)
-            it.removeView(viewPager)
-            it.addView(composeView, index)
-        }
-
-        return view
+        return composeView!!
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // No-op — all content is now in Compose
+        // All content is now Compose — nothing to initialize
     }
 
     override fun slideIn(animPlayer: AnimPlayer) {

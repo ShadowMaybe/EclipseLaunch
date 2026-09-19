@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -34,12 +34,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import me.shadow.eclipselaunch.InfoCenter
-import me.shadow.eclipselaunch.InfoDistributor
 import me.shadow.eclipselaunch.R
 import me.shadow.eclipselaunch.utils.stringutils.StringUtils
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.CardDefaults
 import top.yukonga.miuix.kmp.basic.Text
+import top.yukonga.miuix.kmp.basic.TextButton
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 data class ContributorItem(
@@ -63,53 +63,32 @@ fun AboutScreen(
             .fillMaxSize()
             .background(MiuixTheme.colorScheme.background)
     ) {
-        // Left side: scrollable content
+        // Left side: scrollable content (~69% matching original guideline)
         LazyColumn(
             modifier = Modifier
-                .weight(0.7f)
+                .weight(0.69f)
                 .fillMaxHeight()
                 .padding(horizontal = 12.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Title card
+            // Title + descriptions card
             item {
-                AboutTitleCard()
-            }
-
-            // Description card
-            item {
-                AboutDescriptionCard(context)
+                AboutInfoCard(context)
             }
 
             // Contributors card
             item {
-                Text(
-                    text = stringResource(R.string.about_contributors),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MiuixTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(start = 4.dp)
-                )
-            }
-
-            items(contributors) { contributor ->
-                ContributorCard(
-                    contributor = contributor,
-                    onOpenLink = onOpenLink
-                )
+                ContributorsSection(contributors, onOpenLink)
             }
         }
 
-        // Right side: sidebar
-        AboutSidebar(
-            context = context,
-            onBack = onBack
-        )
+        // Right side: sidebar (~31%)
+        AboutSidebar(context, onBack)
     }
 }
 
 @Composable
-private fun AboutTitleCard() {
+private fun AboutInfoCard(context: Context) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.defaultColors(
@@ -120,42 +99,39 @@ private fun AboutTitleCard() {
             modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // App title image — use text as fallback
-            Text(
-                text = InfoDistributor.APP_NAME,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = MiuixTheme.colorScheme.onSurface
+            // Title image
+            Image(
+                painter = painterResource(R.drawable.app_name_title),
+                contentDescription = InfoCenter.replaceName(context, R.string.app_name),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+                contentScale = ContentScale.FitCenter
             )
-        }
-    }
-}
 
-@Composable
-private fun AboutDescriptionCard(context: Context) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.defaultColors(
-            color = MiuixTheme.colorScheme.surface
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Description 1
             Text(
                 text = InfoCenter.replaceName(context, R.string.about_dec1),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
                 color = MiuixTheme.colorScheme.onSurface
             )
+
             Spacer(modifier = Modifier.height(8.dp))
+
+            // Description 2
             Text(
                 text = InfoCenter.replaceName(context, R.string.about_dec2),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
                 color = MiuixTheme.colorScheme.onSurface
             )
+
             Spacer(modifier = Modifier.height(8.dp))
+
+            // Description 3
             Text(
                 text = InfoCenter.replaceName(context, R.string.about_dec3),
                 fontSize = 12.sp,
@@ -167,8 +143,8 @@ private fun AboutDescriptionCard(context: Context) {
 }
 
 @Composable
-private fun ContributorCard(
-    contributor: ContributorItem,
+private fun ContributorsSection(
+    contributors: List<ContributorItem>,
     onOpenLink: (String) -> Unit
 ) {
     Card(
@@ -177,59 +153,84 @@ private fun ContributorCard(
             color = MiuixTheme.colorScheme.surface
         )
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier.padding(16.dp)
         ) {
-            // Icon
-            contributor.icon?.let { drawable ->
-                val bitmap = drawable.toBitmap(48, 48)
-                Image(
-                    bitmap = bitmap.asImageBitmap(),
-                    contentDescription = contributor.name,
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(RoundedCornerShape(24.dp)),
-                    contentScale = ContentScale.Crop
-                )
-            }
+            // Contributors header
+            Text(
+                text = stringResource(R.string.about_contributors),
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = MiuixTheme.colorScheme.onSurface
+            )
 
-            Spacer(modifier = Modifier.width(15.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            // Name and description
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = contributor.name,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    color = MiuixTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = contributor.description,
-                    fontSize = 11.sp,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    color = MiuixTheme.colorScheme.onSurfaceSecondary
-                )
+            // Contributor items
+            contributors.forEach { contributor ->
+                ContributorItemCard(contributor, onOpenLink)
+                Spacer(modifier = Modifier.height(4.dp))
             }
+        }
+    }
+}
 
-            // Button
-            contributor.buttonLabel?.let { label ->
-                Spacer(modifier = Modifier.width(8.dp))
-                top.yukonga.miuix.kmp.basic.TextButton(
-                    text = label,
-                    onClick = {
-                        contributor.buttonUrl?.let { onOpenLink(it) }
-                    },
-                    modifier = Modifier.padding(0.dp)
-                )
-            }
+@Composable
+private fun ContributorItemCard(
+    contributor: ContributorItem,
+    onOpenLink: (String) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Icon
+        contributor.icon?.let { drawable ->
+            val bitmap = drawable.toBitmap(48, 48)
+            Image(
+                bitmap = bitmap.asImageBitmap(),
+                contentDescription = contributor.name,
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(24.dp)),
+                contentScale = ContentScale.Crop
+            )
+        }
+
+        Spacer(modifier = Modifier.width(15.dp))
+
+        // Name and description
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = contributor.name,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = MiuixTheme.colorScheme.onSurface
+            )
+            Text(
+                text = contributor.description,
+                fontSize = 11.sp,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                color = MiuixTheme.colorScheme.onSurfaceSecondary
+            )
+        }
+
+        // Action button
+        contributor.buttonLabel?.let { label ->
+            Spacer(modifier = Modifier.width(8.dp))
+            TextButton(
+                text = label,
+                onClick = {
+                    contributor.buttonUrl?.let { onOpenLink(it) }
+                }
+            )
         }
     }
 }
@@ -241,37 +242,58 @@ private fun AboutSidebar(
 ) {
     Box(
         modifier = Modifier
-            .width(200.dp)
             .fillMaxHeight()
+            .width(200.dp)
             .background(MiuixTheme.colorScheme.surface)
-            .padding(8.dp)
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // App info
-            Column(modifier = Modifier.padding(8.dp)) {
-                val versionInfo = listOf(
-                    "${context.getString(R.string.about_version_name)} ${me.shadow.eclipselaunch.utils.ZHTools.getVersionName()}",
-                    "${context.getString(R.string.about_version_code)} ${me.shadow.eclipselaunch.utils.ZHTools.getVersionCode()}",
-                    "${context.getString(R.string.about_last_update_time)} ${me.shadow.eclipselaunch.utils.ZHTools.getLastUpdateTime(context)}",
-                    "${context.getString(R.string.about_version_status)} ${me.shadow.eclipselaunch.utils.ZHTools.getVersionStatus(context)}"
-                ).joinToString("\n")
-
-                Text(
-                    text = versionInfo,
-                    fontSize = 12.sp,
-                    lineHeight = 18.sp,
-                    color = MiuixTheme.colorScheme.onSurface,
-                    modifier = Modifier.clickable {
+            // App version info
+            Column(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .clickable {
+                        val versionInfo = listOf(
+                            "${context.getString(R.string.about_version_name)} ${me.shadow.eclipselaunch.utils.ZHTools.getVersionName()}",
+                            "${context.getString(R.string.about_version_code)} ${me.shadow.eclipselaunch.utils.ZHTools.getVersionCode()}",
+                            "${context.getString(R.string.about_last_update_time)} ${me.shadow.eclipselaunch.utils.ZHTools.getLastUpdateTime(context)}",
+                            "${context.getString(R.string.about_version_status)} ${me.shadow.eclipselaunch.utils.ZHTools.getVersionStatus(context)}"
+                        ).joinToString("\n")
                         StringUtils.copyText("text", versionInfo, context)
                     }
+            ) {
+                Text(
+                    text = "${context.getString(R.string.about_version_name)} ${me.shadow.eclipselaunch.utils.ZHTools.getVersionName()}",
+                    fontSize = 12.sp,
+                    lineHeight = 18.sp,
+                    color = MiuixTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = "${context.getString(R.string.about_version_code)} ${me.shadow.eclipselaunch.utils.ZHTools.getVersionCode()}",
+                    fontSize = 12.sp,
+                    lineHeight = 18.sp,
+                    color = MiuixTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = "${context.getString(R.string.about_last_update_time)} ${me.shadow.eclipselaunch.utils.ZHTools.getLastUpdateTime(context)}",
+                    fontSize = 12.sp,
+                    lineHeight = 18.sp,
+                    color = MiuixTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = "${context.getString(R.string.about_version_status)} ${me.shadow.eclipselaunch.utils.ZHTools.getVersionStatus(context)}",
+                    fontSize = 12.sp,
+                    lineHeight = 18.sp,
+                    color = MiuixTheme.colorScheme.onSurface
                 )
             }
 
             // Return button
-            top.yukonga.miuix.kmp.basic.TextButton(
+            TextButton(
                 text = context.getString(R.string.generic_return),
                 onClick = onBack,
                 modifier = Modifier
