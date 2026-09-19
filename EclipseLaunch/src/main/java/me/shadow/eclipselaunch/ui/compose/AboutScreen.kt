@@ -112,8 +112,8 @@ fun AboutScreen(
 private fun AboutTitleCard() {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MiuixTheme.colorScheme.surface
+        colors = CardDefaults.defaultColors(
+            color = MiuixTheme.colorScheme.surface
         )
     ) {
         Column(
@@ -135,8 +135,8 @@ private fun AboutTitleCard() {
 private fun AboutDescriptionCard(context: Context) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MiuixTheme.colorScheme.surface
+        colors = CardDefaults.defaultColors(
+            color = MiuixTheme.colorScheme.surface
         )
     ) {
         Column(
@@ -173,8 +173,8 @@ private fun ContributorCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MiuixTheme.colorScheme.surface
+        colors = CardDefaults.defaultColors(
+            color = MiuixTheme.colorScheme.surface
         )
     ) {
         Row(
@@ -215,7 +215,7 @@ private fun ContributorCard(
                     fontSize = 11.sp,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    color = MiuixTheme.colorScheme.onSurfaceVariant
+                    color = MiuixTheme.colorScheme.onSurfaceSecondary
                 )
             }
 
