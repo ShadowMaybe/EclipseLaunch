@@ -70,13 +70,14 @@ class VersionManagerFragment : FragmentWithAnim() {
     private fun openMods() {
         val version = getVersion() ?: return
         val bundle = Bundle()
-        bundle.putString(ModsFragment.BUNDLE_ROOT_PATH, File(version.getGameDir(), "/mods").apply { mkdirs() }.absolutePath)
+        val modsDir = File(version.getGameDir(), "mods").apply { mkdirs() }
+        bundle.putString(ModsFragment.BUNDLE_ROOT_PATH, modsDir.absolutePath)
         ZHTools.swapFragmentWithAnim(this, ModsFragment::class.java, ModsFragment.TAG, bundle)
     }
 
     private fun openPath(transform: (File) -> File) {
         val version = getVersion() ?: return
-        val dir = transform(File(version.getGameDir())).apply { mkdirs() }
+        val dir = transform(File(version.getGameDir().absolutePath)).apply { mkdirs() }
         val bundle = Bundle()
         bundle.putString(FilesFragment.BUNDLE_LOCK_PATH, dir.absolutePath)
         bundle.putString(FilesFragment.BUNDLE_LIST_PATH, dir.absolutePath)
