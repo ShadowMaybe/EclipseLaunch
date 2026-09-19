@@ -5,54 +5,47 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.core.app.ActivityCompat
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.compose.runtime.mutableIntStateOf
 import me.shadow.eclipselaunch.InfoCenter
 import me.shadow.eclipselaunch.InfoDistributor
 import me.shadow.eclipselaunch.R
-import me.shadow.eclipselaunch.databinding.ActivitySplashBinding
 import me.shadow.eclipselaunch.feature.unpack.Components
 import me.shadow.eclipselaunch.feature.unpack.Jre
+import me.shadow.eclipselaunch.feature.unpack.OnTaskRunningListener
 import me.shadow.eclipselaunch.feature.unpack.UnpackComponentsTask
 import me.shadow.eclipselaunch.feature.unpack.UnpackJreTask
 import me.shadow.eclipselaunch.feature.unpack.UnpackSingleFilesTask
 import me.shadow.eclipselaunch.task.Task
+import me.shadow.eclipselaunch.ui.compose.EclipseMiuixTheme
+import me.shadow.eclipselaunch.ui.compose.SplashScreen
 import me.shadow.eclipselaunch.ui.dialog.TipDialog
 import me.shadow.eclipselaunch.utils.StoragePermissionsUtils
 import net.kdt.pojavlaunch.LauncherActivity
 import net.kdt.pojavlaunch.MissingStorageActivity
 import net.kdt.pojavlaunch.Tools
+import java.util.concurrent.atomic.AtomicInteger
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : BaseActivity() {
     private var isStarted: Boolean = false
-    private lateinit var binding: ActivitySplashBinding
-    private lateinit var installableAdapter: InstallableAdapter
     private val items: MutableList<InstallableItem> = ArrayList()
+    private var completedTasksCount = AtomicInteger(0)
+    // Counter to force Compose recomposition when items change
+    private val recomposeCounter = mutableIntStateOf(0)
+
+    private lateinit var installText: String
+    private lateinit var startText: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initItems()
+        installText = getString(R.string.splash_screen_installing)
+        startText = getString(R.string.splash_screen_apply)
 
-        binding = ActivitySplashBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        binding.titleText.text = InfoDistributor.APP_NAME
-        binding.recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@SplashActivity)
-            adapter = installableAdapter
-        }
-
-        binding.startButton.apply {
-            setOnClickListener {
-                if (isStarted) return@setOnClickListener
-                isStarted = true
-                binding.splashText.setText(R.string.splash_screen_installing)
-                installableAdapter.startAllTasks()
-            }
-            isClickable = false
-        }
+        renderContent()
 
         if (!Tools.checkStorageRoot()) {
             startActivity(Intent(this, MissingStorageActivity::class.java))
@@ -60,18 +53,39 @@ class SplashActivity : BaseActivity() {
             return
         }
 
-        //如果安卓版本小于等于9，则检查存储权限（不是管理所有文件权限），拥有存储权限会保证文件、文件夹正常创建
-        //但是并不强制要求用户必须授予权限，如果用户拒绝，那么之后产生的问题将由用户承担
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P && !StoragePermissionsUtils.hasStoragePermissions(this)) {
             TipDialog.Builder(this)
                 .setTitle(R.string.generic_warning)
                 .setMessage(InfoCenter.replaceName(this, R.string.permissions_write_external_storage))
                 .setWarning()
                 .setConfirmClickListener { requestStoragePermissions() }
-                .setCancelClickListener { checkEnd() } //用户取消，那就跟随用户的意愿
+                .setCancelClickListener { checkEnd() }
                 .showDialog()
         } else {
             checkEnd()
+        }
+    }
+
+    private fun renderContent() {
+        setContent {
+            EclipseMiuixTheme {
+                // Read recomposeCounter to trigger recomposition
+                @Suppress("UNUSED_EXPRESSION")
+                recomposeCounter.intValue
+
+                SplashScreen(
+                    title = InfoDistributor.APP_NAME,
+                    statusText = if (isStarted) installText else startText,
+                    items = items.toList(),
+                    startEnabled = !isStarted,
+                    onStartClick = {
+                        if (isStarted) return@SplashScreen
+                        isStarted = true
+                        startAllTasks()
+                        renderContent()
+                    }
+                )
+            }
         }
     }
 
@@ -90,8 +104,6 @@ class SplashActivity : BaseActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == STORAGE_PERMISSION_REQUEST_CODE) {
-            //无论用户是否授予了权限，都会完成检查，因为启动器并不强制要求权限
-            //但是一旦因为存储权限出现了问题，那么将由用户自行承担后果
             checkEnd()
         }
     }
@@ -122,18 +134,52 @@ class SplashActivity : BaseActivity() {
             }
         }
         items.sort()
-        installableAdapter = InstallableAdapter(items) {
-            toMain()
-        }
     }
-    
+
     private fun checkEnd() {
-        installableAdapter.checkAllTask()
+        items.forEachIndexed { index, item ->
+            if (!item.task.isNeedUnpack()) {
+                item.isFinished = true
+                updateTaskCount(index)
+            }
+        }
         Task.runTask {
             UnpackSingleFilesTask(this).run()
         }.execute()
+    }
 
-        binding.startButton.isClickable = true
+    private fun startAllTasks() {
+        items.forEachIndexed { index, item ->
+            if (!item.isFinished) {
+                Thread {
+                    item.task.setTaskRunningListener(object : OnTaskRunningListener {
+                        override fun onTaskStart() {
+                            item.isRunning = true
+                            runOnUiThread { recomposeCounter.intValue++ }
+                        }
+
+                        override fun onTaskEnd() {
+                            item.isRunning = false
+                            item.isFinished = true
+                            updateTaskCount(index)
+                        }
+                    })
+                    item.task.run()
+                }.start()
+            }
+        }
+    }
+
+    private fun updateTaskCount(index: Int) {
+        completedTasksCount.incrementAndGet()
+        runOnUiThread {
+            recomposeCounter.intValue++
+        }
+        if (completedTasksCount.get() >= items.size) {
+            runOnUiThread {
+                toMain()
+            }
+        }
     }
 
     private fun toMain() {
