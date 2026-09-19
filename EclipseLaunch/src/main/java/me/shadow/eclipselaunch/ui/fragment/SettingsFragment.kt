@@ -8,9 +8,9 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.movtery.anim.AnimPlayer
 import com.movtery.anim.animations.Animations
-import me.shadow.eclipselaunch.R
 import me.shadow.eclipselaunch.ui.compose.EclipseMiuixTheme
 import me.shadow.eclipselaunch.ui.compose.SettingsScreen
+import me.shadow.eclipselaunch.utils.ZHTools
 
 class SettingsFragment : FragmentWithAnim() {
     companion object {
@@ -28,7 +28,24 @@ class SettingsFragment : FragmentWithAnim() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 EclipseMiuixTheme {
-                    SettingsScreen()
+                    SettingsScreen(
+                        onNavigateToCustomBackground = {
+                            ZHTools.swapFragmentWithAnim(
+                                this@SettingsFragment,
+                                CustomBackgroundFragment::class.java,
+                                CustomBackgroundFragment.TAG,
+                                null
+                            )
+                        },
+                        onNavigateToCustomMouse = {
+                            ZHTools.swapFragmentWithAnim(
+                                this@SettingsFragment,
+                                CustomMouseFragment::class.java,
+                                CustomMouseFragment.TAG,
+                                null
+                            )
+                        }
+                    )
                 }
             }
         }
